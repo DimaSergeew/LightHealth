@@ -71,7 +71,7 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/DimaSergeew/LightHealth
       name: GitHub
-    - icon: fontawesome/brands/modrinth
+    - icon: material/package-variant
       link: https://modrinth.com/plugin/lighthealth
       name: Modrinth
   generator: false
