@@ -1,12 +1,12 @@
 # LightHealth
 
-![LightHealth](assets/banner.png)
+![LightHealth banner](assets/banner.png){ .hero }
 
 Modern, lightweight **mob health feedback** for Paper / Folia.
 
 **One job** — show HP and damage. Nothing else.
 
-![Preview](assets/gallery.png)
+![In-game style preview](assets/gallery.png){ .hero }
 
 ## Features
 

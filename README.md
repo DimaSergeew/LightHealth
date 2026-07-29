@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.png" alt="LightHealth" width="920">
+  <img src="assets/banner.png" alt="LightHealth" width="800" height="450">
 </p>
 
 <h1 align="center">LightHealth</h1>
@@ -27,7 +27,7 @@
 ---
 
 <p align="center">
-  <img src="assets/icon.png" alt="Icon" width="112">
+  <img src="assets/icon.png" alt="Icon" width="112" height="112">
 </p>
 
 **One job.** Show mob HP and damage — nothing else.  
@@ -41,7 +41,7 @@ Zero hard dependencies · Folia-ready · locales `en` `ru` `es` `zh`
 | **Look-at** | Show HP while aiming at a mob |
 
 <p align="center">
-  <img src="assets/gallery.png" alt="In-game style preview" width="720">
+  <img src="assets/gallery.png" alt="In-game style preview" width="720" height="405">
 </p>
 
 ## Install
