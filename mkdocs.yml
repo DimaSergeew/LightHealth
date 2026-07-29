@@ -67,13 +67,6 @@ markdown_extensions:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 extra:
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/DimaSergeew/LightHealth
-      name: GitHub
-    - icon: material/package-variant
-      link: https://modrinth.com/plugin/lighthealth
-      name: Modrinth
   generator: false
 
 nav:

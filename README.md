@@ -1,24 +1,9 @@
 # LightHealth
 
-<p align="center">
-  <strong>Modern mob health feedback for Paper / Folia</strong><br>
-  Hologram · damage numbers · actionbar · bossbar · look-at
-</p>
+**Modern mob health feedback for Paper / Folia**  
+Hologram · damage numbers · actionbar · bossbar · look-at
 
-<p align="center">
-  <a href="https://dimasergeew.github.io/LightHealth/"><img src="https://img.shields.io/badge/docs-wiki-1DB954?style=for-the-badge&logo=gitbook&logoColor=white" alt="Docs"></a>
-  <a href="https://modrinth.com/plugin/lighthealth"><img src="https://img.shields.io/badge/modrinth-lighthealth-1BD96A?style=for-the-badge&logo=modrinth&logoColor=white" alt="Modrinth"></a>
-  <a href="https://github.com/DimaSergeew/LightHealth/releases/latest"><img src="https://img.shields.io/github/v/release/DimaSergeew/LightHealth?style=for-the-badge&label=release&color=2D6A4F" alt="Release"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-238636?style=for-the-badge" alt="MIT"></a>
-</p>
-
-<p align="center">
-  <a href="https://dimasergeew.github.io/LightHealth/"><b>Documentation</b></a>
-  ·
-  <a href="https://modrinth.com/plugin/lighthealth">Modrinth</a>
-  ·
-  <a href="https://github.com/DimaSergeew/LightHealth/releases">Releases</a>
-</p>
+[Documentation](https://dimasergeew.github.io/LightHealth/) · [Modrinth](https://modrinth.com/plugin/lighthealth) · [Releases](https://github.com/DimaSergeew/LightHealth/releases)
 
 ---
 

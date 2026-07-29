@@ -4,33 +4,12 @@ Modern, lightweight **mob health feedback** for Paper / Folia.
 
 **One job** — show HP and damage. Nothing else.
 
-<div class="grid cards" markdown>
+## Features
 
--   :material-heart-pulse:{ .lg .middle } **Hologram**
-
-    ---
-
-    Bar above the mob. Does not rewrite entity names.
-
--   :material-numeric:{ .lg .middle } **Damage numbers**
-
-    ---
-
-    Color by damage amount. Crits with ✦ and gradient.
-
--   :material-card-text-outline:{ .lg .middle } **Action / Boss bar**
-
-    ---
-
-    Green → yellow → red. HP + damage dealt.
-
--   :material-eye-outline:{ .lg .middle } **Look-at**
-
-    ---
-
-    Show HP while aiming at a mob.
-
-</div>
+- **Hologram** — bar above the mob (does not rewrite entity names)
+- **Damage numbers** — color by amount, crits with ✦
+- **Action / Boss bar** — green → yellow → red
+- **Look-at** — HP while aiming at a mob
 
 ## Why LightHealth
 
@@ -52,9 +31,9 @@ Modern, lightweight **mob health feedback** for Paper / Folia.
 plugins/LightHealth-1.0.0.jar
 ```
 
-[Install →](install.md){ .md-button .md-button--primary }
-[Commands →](commands.md){ .md-button }
-[Config →](config.md){ .md-button }
+- [Install](install.md)
+- [Commands](commands.md)
+- [Config](config.md)
 
 ## Links
 
