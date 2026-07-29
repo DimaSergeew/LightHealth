@@ -74,6 +74,7 @@ look-at:
 
 ## Links
 
+- [Documentation / Wiki](https://dimasergeew.github.io/LightHealth/)
 - [Source (GitHub)](https://github.com/DimaSergeew/LightHealth)
 - [Releases](https://github.com/DimaSergeew/LightHealth/releases)
 
