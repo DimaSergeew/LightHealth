@@ -37,10 +37,10 @@ theme:
     - content.code.copy
     - content.tabs.link
     - toc.follow
-  logo: assets/icon.png
-  favicon: assets/icon.png
   icon:
     repo: fontawesome/brands/github
+    logo: material/heart-pulse
+    favicon: material/heart-pulse
 
 plugins:
   - search

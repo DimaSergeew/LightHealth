@@ -1,10 +1,6 @@
 # LightHealth
 
 <p align="center">
-  <img src="assets/banner.png" alt="LightHealth — modern mob health feedback" width="820">
-</p>
-
-<p align="center">
   <strong>Modern mob health feedback for Paper / Folia</strong><br>
   Hologram · damage numbers · actionbar · bossbar · look-at
 </p>
@@ -29,22 +25,12 @@
 **One job.** Show mob HP and damage — nothing else.  
 Zero hard deps · Folia-ready · `en` `ru` `es` `zh`
 
-<p align="center">
-  <img src="assets/icon.png" alt="LightHealth icon" width="128">
-</p>
-
 | Channel | What you get |
 |---------|----------------|
 | **Hologram** | Bar above mob (TextDisplay) |
 | **Numbers** | Color tiers + crit ✦ |
 | **Action / Boss** | Green → yellow → red |
 | **Look-at** | HP while aiming |
-
-<p align="center">
-  <img src="assets/gallery-hologram.png" alt="Hologram channel" width="260">
-  <img src="assets/gallery-damage.png" alt="Damage numbers" width="260">
-  <img src="assets/gallery-lookat.png" alt="Look-at mode" width="260">
-</p>
 
 ## Install
 
