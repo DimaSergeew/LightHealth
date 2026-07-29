@@ -1,0 +1,19 @@
+# Español
+prefix: "<gradient:#FF6B6B:#FFA07A><bold>LightHealth</bold></gradient> <dark_gray>»</dark_gray> "
+
+reloaded: "<green>Configuración y mensajes recargados."
+toggled-on: "<green>Visualización de vida de mobs <white>activada</white>."
+toggled-off: "<gray>Visualización de vida de mobs <white>desactivada</white>."
+players-only: "<red>Solo jugadores."
+no-permission: "<red>Sin permiso."
+unknown-language: "<red>Idioma desconocido. Usa: <white>en</white>, <white>ru</white>, <white>es</white>, <white>zh</white>."
+language-set: "<green>Idioma cambiado a <white><lang></white>."
+usage:
+  - ""
+  - "<gradient:#FF6B6B:#FFA07A><bold>LightHealth</bold></gradient>"
+  - "<gray>Feedback de vida de mobs — hologram / numbers / actionbar / bossbar."
+  - ""
+  - "<green>/lh toggle</green> <dark_gray>— <gray>activar/desactivar personal"
+  - "<green>/lh reload</green> <dark_gray>— <gray>recargar config (admin)"
+  - "<green>/lh lang <code></green> <dark_gray>— <gray>en / ru / es / zh (admin)"
+  - ""

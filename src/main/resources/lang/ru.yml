@@ -1,0 +1,19 @@
+# Русский
+prefix: "<gradient:#FF6B6B:#FFA07A><bold>LightHealth</bold></gradient> <dark_gray>»</dark_gray> "
+
+reloaded: "<green>Конфиг и сообщения перезагружены."
+toggled-on: "<green>Отображение HP мобов <white>включено</white>."
+toggled-off: "<gray>Отображение HP мобов <white>выключено</white>."
+players-only: "<red>Только для игроков."
+no-permission: "<red>Нет прав."
+unknown-language: "<red>Неизвестный язык. Доступно: <white>en</white>, <white>ru</white>, <white>es</white>, <white>zh</white>."
+language-set: "<green>Язык установлен: <white><lang></white>."
+usage:
+  - ""
+  - "<gradient:#FF6B6B:#FFA07A><bold>LightHealth</bold></gradient>"
+  - "<gray>HP и урон мобов — hologram / numbers / actionbar / bossbar."
+  - ""
+  - "<green>/lh toggle</green> <dark_gray>— <gray>вкл/выкл для себя"
+  - "<green>/lh reload</green> <dark_gray>— <gray>перезагрузить конфиг (админ)"
+  - "<green>/lh lang <code></green> <dark_gray>— <gray>en / ru / es / zh (админ)"
+  - ""

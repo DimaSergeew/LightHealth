@@ -1,0 +1,19 @@
+# 简体中文
+prefix: "<gradient:#FF6B6B:#FFA07A><bold>LightHealth</bold></gradient> <dark_gray>»</dark_gray> "
+
+reloaded: "<green>配置与消息已重新加载。"
+toggled-on: "<green>生物血量显示已<white>开启</white>。"
+toggled-off: "<gray>生物血量显示已<white>关闭</white>。"
+players-only: "<red>仅限玩家使用。"
+no-permission: "<red>没有权限。"
+unknown-language: "<red>未知语言。可用：<white>en</white>、<white>ru</white>、<white>es</white>、<white>zh</white>。"
+language-set: "<green>语言已设置为 <white><lang></white>。"
+usage:
+  - ""
+  - "<gradient:#FF6B6B:#FFA07A><bold>LightHealth</bold></gradient>"
+  - "<gray>生物血量反馈 — hologram / numbers / actionbar / bossbar。"
+  - ""
+  - "<green>/lh toggle</green> <dark_gray>— <gray>个人开关"
+  - "<green>/lh reload</green> <dark_gray>— <gray>重载配置（管理员）"
+  - "<green>/lh lang <code></green> <dark_gray>— <gray>en / ru / es / zh（管理员）"
+  - ""

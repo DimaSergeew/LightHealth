@@ -1,0 +1,112 @@
+# LightHealth — mob HP feedback
+# style: numeric | hearts | bar | custom
+# language: en | ru | es | zh
+
+language: en
+style: bar
+
+display:
+  hologram: true
+  damage-numbers: true
+  actionbar: true
+  bossbar: true
+
+hologram:
+  only-when-damaged: true
+  hide-after-ticks: 40
+  view-distance: 16
+  y-offset: 0.35
+
+# Show HP while looking at a mob (raycast)
+look-at:
+  enabled: true
+  range: 12
+  interval-ticks: 4
+  show:
+    hologram: true
+    actionbar: true
+    bossbar: false
+
+
+damage-numbers:
+  duration-ticks: 28
+  rise-per-tick: 0.045
+  view-distance: 16
+  base-scale: 1.15
+  crit-scale: 1.5
+  tiers:
+    - max: 2
+      format: "<#B0B0B0>-<amount></#B0B0B0>"
+    - max: 4
+      format: "<white>-<amount></white>"
+    - max: 8
+      format: "<#FFEB3B>-<amount></#FFEB3B>"
+    - max: 14
+      format: "<#FFA726><bold>-<amount></bold></#FFA726>"
+    - max: 22
+      format: "<#FF7043><bold>-<amount></bold></#FF7043>"
+    - max: 99999
+      format: "<#FF1744><bold>-<amount></bold></#FF1744>"
+  crit:
+    enabled: true
+    symbol: "✦"
+    format: "<gradient:#FFE082:#FF6D00><bold><symbol> <amount></bold></gradient>"
+
+actionbar:
+  duration-ticks: 40
+
+bossbar:
+  hide-after-ticks: 70
+  min-max-health: 0
+  # static color if dynamic-color: false
+  color: GREEN
+  overlay: NOTCHED_10
+  dynamic-color: true
+  # HP% thresholds for bossbar color + text bar color
+  high-percent: 50
+  mid-percent: 25
+
+# Used when style: custom (and as fallback)
+# Placeholders: <health> <max> <percent> <amount> <name> <hearts> <bar> <symbol>
+format:
+  hologram: "<bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
+  damage: "<#FF5252>-<amount></#FF5252>"
+  actionbar: "<white><name></white> <bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray> <red>-<amount></red>"
+  bossbar: "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>  <red>-<amount></red>"
+
+styles:
+  hearts:
+    full: "❤"
+    empty: "❤"
+    hp-per-heart: 2.0
+    max-icons: 10
+    hologram: "<hearts> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
+    actionbar: "<white><name></white> <hearts> <white><health></white><dark_gray>/</dark_gray><gray><max></gray> <red>-<amount></red>"
+    bossbar: "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>  <red>-<amount></red>"
+  bar:
+    filled: "█"
+    empty: "░"
+    length: 12
+    hologram: "<bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
+    actionbar: "<white><name></white> <bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray> <red>-<amount></red>"
+    bossbar: "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>  <red>-<amount></red>"
+  numeric:
+    hologram: "<red>❤</red> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
+    actionbar: "<white><name></white> <red>❤</red> <white><health></white><dark_gray>/</dark_gray><gray><max></gray> <red>-<amount></red>"
+    bossbar: "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>  <red>-<amount></red>"
+
+blacklist:
+  entities:
+    - ARMOR_STAND
+    - ITEM_FRAME
+    - GLOW_ITEM_FRAME
+    - MARKER
+    - TEXT_DISPLAY
+    - BLOCK_DISPLAY
+    - ITEM_DISPLAY
+    - INTERACTION
+    - VILLAGER
+  worlds: []
+  worlds-as-whitelist: false
+
+players: false

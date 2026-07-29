@@ -1,0 +1,19 @@
+# English
+prefix: "<gradient:#FF6B6B:#FFA07A><bold>LightHealth</bold></gradient> <dark_gray>»</dark_gray> "
+
+reloaded: "<green>Config and messages reloaded."
+toggled-on: "<green>Mob health displays <white>enabled</white>."
+toggled-off: "<gray>Mob health displays <white>disabled</white>."
+players-only: "<red>Players only."
+no-permission: "<red>No permission."
+unknown-language: "<red>Unknown language. Use: <white>en</white>, <white>ru</white>, <white>es</white>, <white>zh</white>."
+language-set: "<green>Language set to <white><lang></white>."
+usage:
+  - ""
+  - "<gradient:#FF6B6B:#FFA07A><bold>LightHealth</bold></gradient>"
+  - "<gray>Modern mob HP feedback — hologram / numbers / actionbar / bossbar."
+  - ""
+  - "<green>/lh toggle</green> <dark_gray>— <gray>personal on/off"
+  - "<green>/lh reload</green> <dark_gray>— <gray>reload config (admin)"
+  - "<green>/lh lang <code></green> <dark_gray>— <gray>en / ru / es / zh (admin)"
+  - ""
