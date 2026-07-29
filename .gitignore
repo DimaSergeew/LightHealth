@@ -17,3 +17,8 @@ Thumbs.db
 local.properties
 *.hprof
 .paperweight/
+site/
+.venv/
+venv/
+__pycache__/
+
