@@ -1,5 +1,7 @@
 # LightHealth
 
+![banner](https://raw.githubusercontent.com/DimaSergeew/LightHealth/main/assets/banner.png)
+
 Modern, lightweight **mob health feedback** for Paper / Folia.
 
 **One job:** show HP and damage — hologram, floating numbers, actionbar, or bossbar.

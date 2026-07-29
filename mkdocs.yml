@@ -12,15 +12,15 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: deep orange
-      accent: red
+      primary: green
+      accent: light-green
       toggle:
         icon: material/weather-night
         name: Dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: deep orange
-      accent: amber
+      primary: green
+      accent: light-green
       toggle:
         icon: material/weather-sunny
         name: Light mode
@@ -37,10 +37,10 @@ theme:
     - content.code.copy
     - content.tabs.link
     - toc.follow
+  logo: assets/icon.png
+  favicon: assets/icon.png
   icon:
     repo: fontawesome/brands/github
-    logo: material/heart-pulse
-    favicon: material/heart-pulse
 
 plugins:
   - search
