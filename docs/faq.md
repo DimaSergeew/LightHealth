@@ -39,6 +39,10 @@ hologram:
 
 Holograms ride the mob (no per-tick teleport). Raise `damage-numbers` view-distance carefully; prefer lower.
 
+## Which servers are supported?
+
+**Spigot, Paper, Purpur, and Folia** (1.21+). No hard dependencies.
+
 ## Folia
 
 Supported. Scheduling uses entity/global region schedulers. Floating damage numbers are cleaned up on entity death/remove (no orphan TextDisplays).
@@ -49,7 +53,7 @@ No. Holograms use **TextDisplay**, not the entity custom name.
 
 ## Java version
 
-Paper **26.x** needs **Java 25+**. Older Java will fail to load Paper API deps.
+Minecraft **1.21+ / Paper 26.x** needs **Java 25+**. Older Java will fail to load the plugin.
 
 ## Where to report issues
 

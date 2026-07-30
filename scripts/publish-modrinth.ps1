@@ -69,7 +69,7 @@ try {
     $projectData = @{
         slug            = $Slug
         title           = "LightHealth"
-        description     = "Modern mob health feedback for Paper / Folia: hologram, damage numbers, actionbar, bossbar, look-at."
+        description     = "Modern mob health feedback for Spigot / Paper / Purpur / Folia: hologram, damage numbers, actionbar, bossbar, look-at."
         categories      = @("management", "utility")
         client_side     = "unsupported"
         server_side     = "required"
@@ -131,7 +131,7 @@ $projectId = $project.id
 try {
     Invoke-Mr -Method PATCH -Url "$api/project/$projectId" -Hdr $headers -Body @{
         body        = $body
-        description = "Modern mob health feedback for Paper / Folia: hologram, damage numbers, actionbar, bossbar, look-at."
+        description = "Modern mob health feedback for Spigot / Paper / Purpur / Folia: hologram, damage numbers, actionbar, bossbar, look-at."
         categories  = @("management", "utility")
         issues_url  = "https://github.com/DimaSergeew/LightHealth/issues"
         source_url  = "https://github.com/DimaSergeew/LightHealth"
@@ -175,7 +175,7 @@ $versionData = @{
     dependencies   = @()
     game_versions  = @("1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6", "1.21.7", "1.21.8", "1.21.9", "1.21.10", "1.21.11", "26.1", "26.1.1", "26.1.2", "26.2")
     version_type   = "release"
-    loaders        = @("paper", "purpur", "folia")
+    loaders        = @("bukkit", "spigot", "paper", "purpur", "folia")
     featured       = $true
     status         = if ($Draft) { "draft" } else { "listed" }
     project_id     = $projectId

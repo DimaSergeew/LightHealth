@@ -33,7 +33,7 @@ paperPluginYaml {
     main = "me.bedepay.lighthealth.LightHealth"
     apiVersion = "1.21"
     authors = listOf("bedepay")
-    description = "Modern mob health feedback: hologram, damage numbers, actionbar, bossbar. Folia-ready."
+    description = "Modern mob health feedback for Spigot/Paper/Folia: hologram, damage numbers, actionbar, bossbar."
     foliaSupported = true
 
     permissions.register("lighthealth.see") {

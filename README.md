@@ -5,13 +5,14 @@
 <h1 align="center">LightHealth</h1>
 
 <p align="center">
-  <strong>Modern mob health feedback for Paper / Folia</strong><br>
+  <strong>Modern mob health feedback for Spigot / Paper / Folia</strong><br>
   Hologram · damage numbers · actionbar · bossbar · look-at
 </p>
 
 <p align="center">
   <a href="https://dimasergeew.github.io/LightHealth/"><img src="https://img.shields.io/badge/docs-wiki-1DB954?style=flat-square&logo=gitbook&logoColor=white" alt="Docs"></a>
   <a href="https://modrinth.com/plugin/lighthealth"><img src="https://img.shields.io/badge/modrinth-lighthealth-1BD96A?style=flat-square&logo=modrinth&logoColor=white" alt="Modrinth"></a>
+  <a href="https://www.spigotmc.org/resources/lighthealth.137519/"><img src="https://img.shields.io/badge/spigot-lighthealth-ED8106?style=flat-square" alt="SpigotMC"></a>
   <a href="https://github.com/DimaSergeew/LightHealth/releases/latest"><img src="https://img.shields.io/github/v/release/DimaSergeew/LightHealth?style=flat-square&color=2D6A4F" alt="Release"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-238636?style=flat-square" alt="MIT"></a>
 </p>
@@ -20,6 +21,8 @@
   <a href="https://dimasergeew.github.io/LightHealth/"><b>Documentation</b></a>
   ·
   <a href="https://modrinth.com/plugin/lighthealth">Modrinth</a>
+  ·
+  <a href="https://www.spigotmc.org/resources/lighthealth.137519/">SpigotMC</a>
   ·
   <a href="https://github.com/DimaSergeew/LightHealth/releases">Releases</a>
 </p>
@@ -31,7 +34,7 @@
 </p>
 
 **One job.** Show mob HP and damage — nothing else.  
-Zero hard dependencies · Folia-ready · locales `en` `ru` `es` `zh`
+Zero hard dependencies · **Spigot / Paper / Purpur / Folia** · locales `en` `ru` `es` `zh`
 
 | Channel | What you get |
 |---------|----------------|
@@ -79,7 +82,7 @@ Full reference → **[Wiki](https://dimasergeew.github.io/LightHealth/)**
 # → build/libs/LightHealth-1.0.0.jar
 ```
 
-**Requires** Java **25+** · Paper **1.21+ / 26.x** (or Folia)
+**Requires** Java **25+** · **Spigot / Paper / Purpur / Folia** **1.21+** (Paper **26.x** supported)
 
 ## License
 

@@ -4,13 +4,13 @@
 
 | | |
 |--|--|
-| Server | Paper / Purpur / Folia **1.21+** (modern Paper **26.x**) |
+| Server | **Spigot / Paper / Purpur / Folia** **1.21+** (modern Paper **26.x** supported) |
 | Java | **25+** |
 | Dependencies | **None** |
 
 ## Steps
 
-1. Download `LightHealth-x.y.z.jar` from [Releases](https://github.com/DimaSergeew/LightHealth/releases) or [Modrinth](https://modrinth.com/plugin/lighthealth)
+1. Download `LightHealth-x.y.z.jar` from [Releases](https://github.com/DimaSergeew/LightHealth/releases), [Modrinth](https://modrinth.com/plugin/lighthealth), or [SpigotMC](https://www.spigotmc.org/resources/lighthealth.137519/)
 2. Put it into `plugins/`
 3. Start the server
 4. Optional: edit `plugins/LightHealth/config.yml`

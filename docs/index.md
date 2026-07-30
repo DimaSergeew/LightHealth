@@ -2,7 +2,7 @@
 
 ![LightHealth banner](assets/banner.png){ .hero }
 
-Modern, lightweight **mob health feedback** for Paper / Folia.
+Modern, lightweight **mob health feedback** for **Spigot / Paper / Purpur / Folia**.
 
 **One job** — show HP and damage. Nothing else.
 
@@ -21,6 +21,7 @@ Modern, lightweight **mob health feedback** for Paper / Folia.
 |--|--|
 | **Scope** | One plugin · one purpose |
 | **Deps** | None |
+| **Servers** | Spigot · Paper · Purpur · Folia |
 | **Folia** | Supported |
 | **Locales** | `en` `ru` `es` `zh` |
 
@@ -43,4 +44,5 @@ plugins/LightHealth-1.0.0.jar
 
 - [GitHub](https://github.com/DimaSergeew/LightHealth)
 - [Modrinth](https://modrinth.com/plugin/lighthealth)
+- [SpigotMC](https://www.spigotmc.org/resources/lighthealth.137519/)
 - [Releases](https://github.com/DimaSergeew/LightHealth/releases)
