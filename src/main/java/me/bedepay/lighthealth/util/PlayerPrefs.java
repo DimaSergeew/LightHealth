@@ -20,6 +20,10 @@ public final class PlayerPrefs {
         return false;
     }
 
+    public void clearPlayer(final UUID uuid) {
+        this.disabled.remove(uuid);
+    }
+
     public void clear() {
         this.disabled.clear();
     }

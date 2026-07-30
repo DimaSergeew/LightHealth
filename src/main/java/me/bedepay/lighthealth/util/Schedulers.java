@@ -7,20 +7,27 @@ import org.bukkit.scheduler.BukkitTask;
 
 public final class Schedulers {
 
+    private static final boolean FOLIA;
+
+    static {
+        boolean folia = false;
+        try {
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+            folia = true;
+        } catch (final ClassNotFoundException ignored) {
+        }
+        FOLIA = folia;
+    }
+
     private Schedulers() {
     }
 
     public static boolean isFolia() {
-        try {
-            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
-            return true;
-        } catch (final ClassNotFoundException e) {
-            return false;
-        }
+        return FOLIA;
     }
 
     public static void entity(final Plugin plugin, final Entity entity, final Runnable task) {
-        if (isFolia()) {
+        if (FOLIA) {
             entity.getScheduler().run(plugin, scheduled -> task.run(), null);
         } else {
             Bukkit.getScheduler().runTask(plugin, task);
@@ -33,7 +40,7 @@ public final class Schedulers {
             final long delayTicks,
             final Runnable task
     ) {
-        if (isFolia()) {
+        if (FOLIA) {
             entity.getScheduler().runDelayed(plugin, scheduled -> task.run(), null, delayTicks);
         } else {
             Bukkit.getScheduler().runTaskLater(plugin, task, delayTicks);
@@ -47,7 +54,7 @@ public final class Schedulers {
             final long periodTicks,
             final Runnable task
     ) {
-        if (isFolia()) {
+        if (FOLIA) {
             return entity.getScheduler().runAtFixedRate(
                     plugin, scheduled -> task.run(), null, Math.max(1L, delayTicks), periodTicks);
         }
@@ -69,7 +76,7 @@ public final class Schedulers {
     }
 
     public static void global(final Plugin plugin, final Runnable task) {
-        if (isFolia()) {
+        if (FOLIA) {
             Bukkit.getGlobalRegionScheduler().run(plugin, scheduled -> task.run());
         } else {
             Bukkit.getScheduler().runTask(plugin, task);
@@ -77,7 +84,7 @@ public final class Schedulers {
     }
 
     public static void globalDelayed(final Plugin plugin, final long delayTicks, final Runnable task) {
-        if (isFolia()) {
+        if (FOLIA) {
             Bukkit.getGlobalRegionScheduler().runDelayed(plugin, scheduled -> task.run(), Math.max(1L, delayTicks));
         } else {
             Bukkit.getScheduler().runTaskLater(plugin, task, delayTicks);
@@ -92,10 +99,9 @@ public final class Schedulers {
     ) {
         final long delay = Math.max(1L, delayTicks);
         final long period = Math.max(1L, periodTicks);
-        if (isFolia()) {
+        if (FOLIA) {
             return Bukkit.getGlobalRegionScheduler().runAtFixedRate(plugin, scheduled -> task.run(), delay, period);
         }
         return Bukkit.getScheduler().runTaskTimer(plugin, task, delay, period);
     }
 }
-

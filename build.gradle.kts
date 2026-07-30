@@ -19,6 +19,8 @@ repositories {
 
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper.api.get())
+    testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 java {
@@ -29,7 +31,6 @@ paperPluginYaml {
     name = "LightHealth"
     version = project.version.toString()
     main = "me.bedepay.lighthealth.LightHealth"
-    bootstrapper = "me.bedepay.lighthealth.LightHealthBootstrap"
     apiVersion = "1.21"
     authors = listOf("bedepay")
     description = "Modern mob health feedback: hologram, damage numbers, actionbar, bossbar. Folia-ready."
@@ -80,5 +81,9 @@ tasks {
 
     processResources {
         filteringCharset = "UTF-8"
+    }
+
+    test {
+        useJUnitPlatform()
     }
 }

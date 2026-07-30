@@ -3,6 +3,7 @@ package me.bedepay.lighthealth.display;
 import me.bedepay.lighthealth.LightHealth;
 import me.bedepay.lighthealth.config.PluginConfig;
 import me.bedepay.lighthealth.util.Schedulers;
+import me.bedepay.lighthealth.util.ViewAccess;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -37,6 +38,11 @@ public final class HologramChannel {
         if (requireDisplayEnabled && !cfg.hologram()) {
             return;
         }
+        // Known player viewer must be allowed (toggle / permission).
+        // No viewer (e.g. fire damage) still spawns a world-visible hologram.
+        if (snap.viewer() != null && !ViewAccess.canSee(plugin, snap.viewer())) {
+            return;
+        }
         final LivingEntity entity = snap.entity();
         if (!entity.isValid() || entity.isDead()) {
             return;
@@ -54,13 +60,15 @@ public final class HologramChannel {
         final ActiveHolo existing = this.active.get(id);
         if (existing != null && existing.display().isValid()) {
             existing.display().text(text);
+            existing.refreshOffset(entity, cfg);
             existing.scheduleHide(plugin, entity, id, cfg.hologramHideTicks());
             return;
         }
 
         remove(id);
 
-        final Location base = entity.getLocation().add(0.0, entity.getHeight() + cfg.hologramYOffset(), 0.0);
+        final float y = (float) (entity.getHeight() + cfg.hologramYOffset());
+        final Location base = entity.getLocation();
         final TextDisplay display = entity.getWorld().spawn(base, TextDisplay.class, d -> {
             d.text(text);
             d.setBillboard(Display.Billboard.CENTER);
@@ -71,25 +79,19 @@ public final class HologramChannel {
             d.setPersistent(false);
             d.setViewRange((float) (cfg.hologramViewDistance() / 64.0));
             d.setTransformation(new Transformation(
-                    new Vector3f(0f, 0f, 0f),
+                    new Vector3f(0f, y, 0f),
                     new AxisAngle4f(0f, 0f, 0f, 1f),
                     new Vector3f(1f, 1f, 1f),
                     new AxisAngle4f(0f, 0f, 0f, 1f)
             ));
-            d.setTeleportDuration(1);
+            d.setTeleportDuration(0);
         });
+
+        // Ride the entity so we do not need a per-tick teleport follow task.
+        entity.addPassenger(display);
 
         final AtomicInteger generation = new AtomicInteger();
-        final Object followTask = Schedulers.entityTimer(plugin, entity, 1L, 1L, () -> {
-            if (!entity.isValid() || entity.isDead() || !display.isValid()) {
-                remove(id);
-                return;
-            }
-            final Location at = entity.getLocation().add(0.0, entity.getHeight() + cfg.hologramYOffset(), 0.0);
-            display.teleportAsync(at);
-        });
-
-        final ActiveHolo holo = new ActiveHolo(display, followTask, generation);
+        final ActiveHolo holo = new ActiveHolo(display, generation);
         this.active.put(id, holo);
         holo.scheduleHide(plugin, entity, id, cfg.hologramHideTicks());
     }
@@ -109,17 +111,29 @@ public final class HologramChannel {
 
     private final class ActiveHolo {
         private final TextDisplay display;
-        private final Object followTask;
         private final AtomicInteger generation;
 
-        private ActiveHolo(final TextDisplay display, final Object followTask, final AtomicInteger generation) {
+        private ActiveHolo(final TextDisplay display, final AtomicInteger generation) {
             this.display = display;
-            this.followTask = followTask;
             this.generation = generation;
         }
 
         private TextDisplay display() {
             return display;
+        }
+
+        private void refreshOffset(final LivingEntity entity, final PluginConfig cfg) {
+            if (!display.isValid()) {
+                return;
+            }
+            final float y = (float) (entity.getHeight() + cfg.hologramYOffset());
+            final Transformation cur = display.getTransformation();
+            display.setTransformation(new Transformation(
+                    new Vector3f(0f, y, 0f),
+                    cur.getLeftRotation(),
+                    cur.getScale(),
+                    cur.getRightRotation()
+            ));
         }
 
         private void scheduleHide(
@@ -142,7 +156,6 @@ public final class HologramChannel {
 
         private void destroy() {
             this.generation.incrementAndGet();
-            Schedulers.cancel(this.followTask);
             if (this.display.isValid()) {
                 this.display.remove();
             }

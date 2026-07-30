@@ -10,13 +10,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.logging.Level;
 
 public final class Messages {
 
@@ -34,7 +35,7 @@ public final class Messages {
     }
 
     public void reload() {
-        extractLocales();
+        extractAndMergeLocales();
         final String requested = plugin.getConfig().getString("language", "en");
         this.activeLanguage = normalize(requested);
         this.fallback = loadLocaleFile("en");
@@ -86,7 +87,11 @@ public final class Messages {
                 || code.startsWith("en");
     }
 
-    private void extractLocales() {
+    /**
+     * Extract bundled locale files and soft-merge any keys added in newer plugin versions
+     * without overwriting admin customizations.
+     */
+    private void extractAndMergeLocales() {
         final File dir = new File(this.plugin.getDataFolder(), "lang");
         if (!dir.exists() && !dir.mkdirs()) {
             this.plugin.getLogger().warning("Could not create lang folder");
@@ -96,6 +101,36 @@ public final class Messages {
             final File out = new File(this.plugin.getDataFolder(), path);
             if (!out.exists()) {
                 this.plugin.saveResource(path, false);
+                continue;
+            }
+            mergeMissingKeys(out, path);
+        }
+    }
+
+    private void mergeMissingKeys(final File diskFile, final String resourcePath) {
+        final InputStream stream = this.plugin.getResource(resourcePath);
+        if (stream == null) {
+            return;
+        }
+        final YamlConfiguration defaults = YamlConfiguration.loadConfiguration(
+                new InputStreamReader(stream, StandardCharsets.UTF_8));
+        final YamlConfiguration disk = YamlConfiguration.loadConfiguration(diskFile);
+        boolean changed = false;
+        for (final String key : defaults.getKeys(true)) {
+            if (defaults.isConfigurationSection(key)) {
+                continue;
+            }
+            if (!disk.contains(key)) {
+                disk.set(key, defaults.get(key));
+                changed = true;
+            }
+        }
+        if (changed) {
+            try {
+                disk.save(diskFile);
+                this.plugin.getLogger().info("Merged new locale keys into " + diskFile.getName());
+            } catch (final IOException e) {
+                this.plugin.getLogger().log(Level.WARNING, "Could not update locale " + diskFile.getName(), e);
             }
         }
     }

@@ -3,6 +3,7 @@ package me.bedepay.lighthealth.display;
 import me.bedepay.lighthealth.LightHealth;
 import me.bedepay.lighthealth.config.PluginConfig;
 import me.bedepay.lighthealth.util.Schedulers;
+import me.bedepay.lighthealth.util.ViewAccess;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 
@@ -30,13 +31,7 @@ public final class ActionBarChannel {
             return;
         }
         final Player viewer = snap.viewer();
-        if (viewer == null || !viewer.isOnline()) {
-            return;
-        }
-        if (!plugin.prefs().isEnabled(viewer.getUniqueId())) {
-            return;
-        }
-        if (!viewer.hasPermission("lighthealth.see")) {
+        if (viewer == null || !ViewAccess.canSee(plugin, viewer)) {
             return;
         }
 
@@ -60,10 +55,25 @@ public final class ActionBarChannel {
             if (online != null && online.isOnline()) {
                 online.sendActionBar(Component.empty());
             }
+            this.generations.remove(id, gen);
         });
     }
 
+    public void removePlayer(final UUID playerId) {
+        final AtomicInteger gen = this.generations.remove(playerId);
+        if (gen != null) {
+            gen.incrementAndGet();
+        }
+        final Player online = plugin.getServer().getPlayer(playerId);
+        if (online != null) {
+            online.sendActionBar(Component.empty());
+        }
+    }
+
     public void shutdown() {
+        for (final UUID id : this.generations.keySet().toArray(UUID[]::new)) {
+            removePlayer(id);
+        }
         this.generations.clear();
     }
 }

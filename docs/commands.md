@@ -5,7 +5,7 @@
 | Command | Permission | Description |
 |---------|------------|-------------|
 | `/lh` · `/lighthealth` · `/mhp` | — | Help |
-| `/lh toggle` | `lighthealth.toggle` | Personal displays on/off |
+| `/lh toggle` | `lighthealth.toggle` | Personal feedback on/off (actionbar, bossbar, look-at; your hits skip holograms & damage numbers) |
 | `/lh reload` | `lighthealth.admin` | Reload config + messages |
 | `/lh lang <code>` | `lighthealth.admin` | Set language |
 
@@ -26,7 +26,7 @@ Tab-complete is available for language codes.
 
 | Permission | Default | Description |
 |------------|---------|-------------|
-| `lighthealth.see` | `true` | See displays |
+| `lighthealth.see` | `true` | Receive personal feedback and spawn holograms/numbers from your hits |
 | `lighthealth.toggle` | `true` | Use `/lh toggle` |
 | `lighthealth.admin` | `op` | Reload & language |
 

@@ -17,6 +17,17 @@ display:
   bossbar: true
 ```
 
+And that you did not run `/lh toggle` off, and have `lighthealth.see`.
+
+## `/lh toggle` still shows holograms from other players
+
+Toggle is **per player**. It turns off:
+
+- your actionbar / bossbar / look-at
+- holograms and damage numbers **spawned by your hits**
+
+If another player hits a mob, their hologram is a world `TextDisplay` and may still be visible. Environmental damage (fire, cactus) can still spawn a hologram with no player viewer.
+
 ## Holograms lag on farms
 
 ```yaml
@@ -26,11 +37,11 @@ hologram:
   view-distance: 12
 ```
 
-Raise `damage-numbers` view-distance carefully; prefer lower.
+Holograms ride the mob (no per-tick teleport). Raise `damage-numbers` view-distance carefully; prefer lower.
 
 ## Folia
 
-Supported. Scheduling uses entity/global region schedulers.
+Supported. Scheduling uses entity/global region schedulers. Floating damage numbers are cleaned up on entity death/remove (no orphan TextDisplays).
 
 ## Does it rewrite mob names?
 

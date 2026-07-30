@@ -28,7 +28,7 @@ display:
 
 ```yaml
 hologram:
-  only-when-damaged: true
+  only-when-damaged: true  # skips 0-damage hits for hologram only (not numbers/bars)
   hide-after-ticks: 40
   view-distance: 16
   y-offset: 0.35

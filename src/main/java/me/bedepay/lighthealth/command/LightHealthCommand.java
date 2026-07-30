@@ -80,7 +80,8 @@ public final class LightHealthCommand {
         final boolean enabled = plugin.prefs().toggle(player.getUniqueId());
         plugin.messages().send(player, enabled ? "toggled-on" : "toggled-off");
         if (!enabled) {
-            plugin.displays().onPlayerQuit(player.getUniqueId());
+            // Drop personal overlays immediately; world TextDisplays from others may still exist.
+            plugin.displays().clearPersonal(player.getUniqueId());
         }
         return Command.SINGLE_SUCCESS;
     }

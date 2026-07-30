@@ -12,6 +12,7 @@ display:
   bossbar: true
 
 hologram:
+  # When true, damage-triggered holograms skip 0-damage hits only (not other channels).
   only-when-damaged: true
   hide-after-ticks: 40
   view-distance: 16

@@ -28,6 +28,7 @@ public final class DisplayService {
     public void reloadFormat() {
         this.format = new FormatService(plugin.config());
         this.hologram.shutdown();
+        this.damageNumbers.shutdown();
         this.bossbar.shutdown();
         this.actionbar.shutdown();
     }
@@ -51,7 +52,11 @@ public final class DisplayService {
         final HealthSnapshot snap = new HealthSnapshot(
                 entity, healthAfter, maxHealth, damageAmount, critical, viewer);
 
-        if (cfg.hologram()) {
+        // only-when-damaged applies to the hologram channel alone
+        final boolean showHologram = cfg.hologram()
+                && (damageAmount > 0.0 || !cfg.hologramOnlyWhenDamaged());
+
+        if (showHologram) {
             this.hologram.handle(snap, this.format, true);
         }
         if (cfg.damageNumbers()) {
@@ -98,14 +103,23 @@ public final class DisplayService {
 
     public void onEntityRemove(final java.util.UUID entityId) {
         this.hologram.remove(entityId);
+        this.damageNumbers.removeVictim(entityId);
     }
 
     public void onPlayerQuit(final java.util.UUID playerId) {
         this.bossbar.removePlayer(playerId);
+        this.actionbar.removePlayer(playerId);
+        this.plugin.prefs().clearPlayer(playerId);
+    }
+
+    public void clearPersonal(final java.util.UUID playerId) {
+        this.bossbar.removePlayer(playerId);
+        this.actionbar.removePlayer(playerId);
     }
 
     public void shutdown() {
         this.hologram.shutdown();
+        this.damageNumbers.shutdown();
         this.bossbar.shutdown();
         this.actionbar.shutdown();
     }

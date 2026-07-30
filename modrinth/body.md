@@ -37,7 +37,7 @@ No hard dependencies. Clean config. Folia-ready.
 | Command | Permission | Description |
 |---------|------------|-------------|
 | `/lh` · `/lighthealth` · `/mhp` | — | Help |
-| `/lh toggle` | `lighthealth.toggle` | Personal on/off |
+| `/lh toggle` | `lighthealth.toggle` | Personal feedback on/off |
 | `/lh reload` | `lighthealth.admin` | Reload config + messages |
 | `/lh lang <code>` | `lighthealth.admin` | Language: `en` `ru` `es` `zh` |
 

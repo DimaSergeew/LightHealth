@@ -64,7 +64,7 @@ display:
 
 | Command | Description |
 |---------|-------------|
-| `/lh toggle` | Personal on/off |
+| `/lh toggle` | Personal feedback on/off |
 | `/lh reload` | Reload config (admin) |
 | `/lh lang <en\|ru\|es\|zh>` | Set language (admin) |
 

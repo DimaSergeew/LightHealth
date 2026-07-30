@@ -3,6 +3,7 @@ package me.bedepay.lighthealth.display;
 import me.bedepay.lighthealth.LightHealth;
 import me.bedepay.lighthealth.config.PluginConfig;
 import me.bedepay.lighthealth.util.Schedulers;
+import me.bedepay.lighthealth.util.ViewAccess;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -13,12 +14,18 @@ import org.bukkit.util.Transformation;
 import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
 
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class DamageNumberChannel {
 
     private final LightHealth plugin;
+    /** Victim entity id → active floating numbers (for death/remove cleanup). */
+    private final Map<UUID, Set<ActiveNumber>> byVictim = new ConcurrentHashMap<>();
 
     public DamageNumberChannel(final LightHealth plugin) {
         this.plugin = plugin;
@@ -27,6 +34,11 @@ public final class DamageNumberChannel {
     public void handle(final HealthSnapshot snap, final FormatService format) {
         final PluginConfig cfg = plugin.config();
         if (!cfg.damageNumbers() || snap.damageAmount() <= 0.0) {
+            return;
+        }
+        // When a player dealt the hit, respect their toggle / permission.
+        // Environmental damage (no viewer) still shows for everyone nearby.
+        if (snap.viewer() != null && !ViewAccess.canSee(plugin, snap.viewer())) {
             return;
         }
         final LivingEntity entity = snap.entity();
@@ -43,11 +55,13 @@ public final class DamageNumberChannel {
                 ? Math.min(cfg.damageDurationTicks() + 6, cfg.damageDurationTicks() * 2)
                 : cfg.damageDurationTicks();
 
-        Schedulers.entity(plugin, entity, () -> spawn(entity, text, cfg, scale, rise, duration));
+        final UUID victimId = entity.getUniqueId();
+        Schedulers.entity(plugin, entity, () -> spawn(entity, victimId, text, cfg, scale, rise, duration));
     }
 
     private void spawn(
             final LivingEntity entity,
+            final UUID victimId,
             final Component text,
             final PluginConfig cfg,
             final float scale,
@@ -82,16 +96,71 @@ public final class DamageNumberChannel {
 
         final AtomicInteger tick = new AtomicInteger();
         final Object[] taskHolder = new Object[1];
-        taskHolder[0] = Schedulers.entityTimer(plugin, entity, 1L, 1L, () -> {
+        // Bind the animation to the *display* entity so it survives victim death on Folia
+        // and can still clean itself up. Victim death also triggers removeVictim().
+        taskHolder[0] = Schedulers.entityTimer(plugin, display, 1L, 1L, () -> {
             final int t = tick.incrementAndGet();
             if (!display.isValid() || t >= duration) {
                 Schedulers.cancel(taskHolder[0]);
-                if (display.isValid()) {
-                    display.remove();
-                }
+                destroyDisplay(victimId, display, taskHolder[0]);
                 return;
             }
             display.teleportAsync(display.getLocation().add(0.0, rise, 0.0));
         });
+
+        final ActiveNumber active = new ActiveNumber(display, taskHolder);
+        this.byVictim
+                .computeIfAbsent(victimId, id -> ConcurrentHashMap.newKeySet())
+                .add(active);
+    }
+
+    public void removeVictim(final UUID victimId) {
+        final Set<ActiveNumber> set = this.byVictim.remove(victimId);
+        if (set == null) {
+            return;
+        }
+        for (final ActiveNumber n : set) {
+            n.destroy();
+        }
+        set.clear();
+    }
+
+    private void destroyDisplay(final UUID victimId, final TextDisplay display, final Object task) {
+        Schedulers.cancel(task);
+        if (display.isValid()) {
+            display.remove();
+        }
+        final Set<ActiveNumber> set = this.byVictim.get(victimId);
+        if (set == null) {
+            return;
+        }
+        set.removeIf(n -> n.display.equals(display) || !n.display.isValid());
+        if (set.isEmpty()) {
+            this.byVictim.remove(victimId, set);
+        }
+    }
+
+    public void shutdown() {
+        for (final UUID id : this.byVictim.keySet().toArray(UUID[]::new)) {
+            removeVictim(id);
+        }
+        this.byVictim.clear();
+    }
+
+    private static final class ActiveNumber {
+        private final TextDisplay display;
+        private final Object[] taskHolder;
+
+        private ActiveNumber(final TextDisplay display, final Object[] taskHolder) {
+            this.display = display;
+            this.taskHolder = taskHolder;
+        }
+
+        private void destroy() {
+            Schedulers.cancel(taskHolder[0]);
+            if (display.isValid()) {
+                display.remove();
+            }
+        }
     }
 }

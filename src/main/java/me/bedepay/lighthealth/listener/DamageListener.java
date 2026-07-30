@@ -36,10 +36,6 @@ public final class DamageListener implements Listener {
         }
 
         final double damage = event.getFinalDamage();
-        if (damage <= 0.0 && plugin.config().hologramOnlyWhenDamaged()) {
-            return;
-        }
-
         final double max = FormatService.maxHealth(living);
         final double healthAfter = Math.max(0.0, living.getHealth() - damage);
         final boolean critical = Crits.isCritical(event);

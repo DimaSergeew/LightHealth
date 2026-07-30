@@ -3,6 +3,7 @@ package me.bedepay.lighthealth.display;
 import me.bedepay.lighthealth.LightHealth;
 import me.bedepay.lighthealth.config.PluginConfig;
 import me.bedepay.lighthealth.util.Schedulers;
+import me.bedepay.lighthealth.util.ViewAccess;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
@@ -31,13 +32,7 @@ public final class BossBarChannel {
             return;
         }
         final Player viewer = snap.viewer();
-        if (viewer == null || !viewer.isOnline()) {
-            return;
-        }
-        if (!plugin.prefs().isEnabled(viewer.getUniqueId())) {
-            return;
-        }
-        if (!viewer.hasPermission("lighthealth.see")) {
+        if (viewer == null || !ViewAccess.canSee(plugin, viewer)) {
             return;
         }
         if (cfg.bossbarMinMaxHealth() > 0.0 && snap.maxHealth() < cfg.bossbarMinMaxHealth()) {

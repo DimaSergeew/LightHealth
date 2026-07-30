@@ -3,9 +3,9 @@ package me.bedepay.lighthealth.listener;
 import me.bedepay.lighthealth.LightHealth;
 import me.bedepay.lighthealth.config.LookAtSettings;
 import me.bedepay.lighthealth.util.Schedulers;
+import me.bedepay.lighthealth.util.ViewAccess;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.RayTraceResult;
@@ -43,10 +43,7 @@ public final class LookAtService {
             if (!player.isOnline() || player.getGameMode() == GameMode.SPECTATOR) {
                 continue;
             }
-            if (!plugin.prefs().isEnabled(player.getUniqueId())) {
-                continue;
-            }
-            if (!player.hasPermission("lighthealth.see")) {
+            if (!ViewAccess.canSee(plugin, player)) {
                 continue;
             }
             Schedulers.entity(plugin, player, () -> checkPlayer(player, settings));
@@ -54,7 +51,7 @@ public final class LookAtService {
     }
 
     private void checkPlayer(final Player player, final LookAtSettings settings) {
-        if (!player.isOnline()) {
+        if (!player.isOnline() || !ViewAccess.canSee(plugin, player)) {
             return;
         }
         final LivingEntity target = findTarget(player, settings.range());
@@ -65,24 +62,20 @@ public final class LookAtService {
     }
 
     private static LivingEntity findTarget(final Player player, final int range) {
-        final Entity direct = player.getTargetEntity(range, false);
-        if (direct instanceof LivingEntity living && living.isValid() && !living.isDead()) {
-            return living;
-        }
-
         final RayTraceResult hit = player.getWorld().rayTraceEntities(
                 player.getEyeLocation(),
                 player.getEyeLocation().getDirection(),
                 range,
                 0.4,
-                entity -> entity instanceof LivingEntity
-                        && entity.isValid()
+                entity -> entity instanceof LivingEntity living
+                        && living.isValid()
+                        && !living.isDead()
                         && !entity.equals(player)
         );
         if (hit == null) {
             return null;
         }
-        if (hit.getHitEntity() instanceof LivingEntity living && !living.isDead()) {
+        if (hit.getHitEntity() instanceof LivingEntity living) {
             return living;
         }
         return null;
