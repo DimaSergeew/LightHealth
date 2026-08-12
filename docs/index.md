@@ -2,18 +2,16 @@
 
 ![LightHealth banner](assets/banner.png){ .hero }
 
-Modern, lightweight **mob health feedback** for **Paper / Purpur / Folia**.
-
-**One job** — show HP and damage. Nothing else.
+Show mob health and damage on **Paper**, **Purpur**, and **Folia** — clearly, and nothing else.
 
 ![In-game style preview](assets/gallery.png){ .hero }
 
 ## Features
 
-- **Hologram** — bar above the mob (does not rewrite entity names)
-- **Damage numbers** — color by amount, crits with ✦
-- **Action / Boss bar** — green → yellow → red
-- **Look-at** — HP while aiming at a mob
+- **Hologram** — a health bar above the mob (does not rewrite entity names)
+- **Damage numbers** — colored by amount, with a distinct crit style
+- **Action / boss bar** — health and damage, shifting green → yellow → red
+- **Look-at** — the same feedback while you aim at a mob
 
 ## Why LightHealth
 
