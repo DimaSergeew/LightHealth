@@ -2,6 +2,8 @@
 
 File: `plugins/LightHealth/config.yml`
 
+After edits, run `/lh reload`. New keys from a plugin update are merged in automatically.
+
 ## Core
 
 ```yaml
@@ -17,7 +19,7 @@ display:
 
 | `style` | Effect |
 |---------|--------|
-| `bar` | `[████░░░░] HP` colored by % |
+| `bar` | `[████░░░░]` colored by remaining health |
 | `hearts` | Colored hearts |
 | `numeric` | Simple numbers |
 | `custom` | Uses `format.*` only |
@@ -28,13 +30,16 @@ display:
 
 ```yaml
 hologram:
-  only-when-damaged: true  # skips 0-damage hits for hologram only (not numbers/bars)
+  only-when-damaged: true  # skips 0-damage hits for hologram only
   hide-after-ticks: 40
   view-distance: 16
-  y-offset: 0.35           # above attachment (mounted) or above the head (follow)
+  y-offset: 0.35           # extra height above the attachment / head
 ```
 
-Rideable mobs (horses, pigs, striders, camels, …) and players are **not** mounted — the hologram follows in world space so you can still ride them. The killing-blow bar stays until hide/remove.
+!!! note
+    Rideable mobs (horses, pigs, striders, camels, …) and players are **not** mounted. The hologram follows in world space so you can still ride them.
+
+    A killing-blow bar can stay until hide or until the entity is removed.
 
 ### Damage numbers
 
@@ -44,7 +49,7 @@ damage-numbers:
   rise-per-tick: 0.045
   base-scale: 1.15
   crit-scale: 1.5
-  env-interval-ticks: 10   # throttle fire/poison/cactus numbers; 0 = off
+  env-interval-ticks: 10   # throttle fire / poison / cactus numbers; 0 = off
   tiers:
     - max: 2
       format: "<#B0B0B0>-<amount></#B0B0B0>"
@@ -55,9 +60,9 @@ damage-numbers:
     format: "<gradient:#FFE082:#FF6D00><bold><symbol> <amount></bold></gradient>"
 ```
 
-First tier where `amount <= max` wins.
+The first tier where `amount <= max` wins. Player hits always show; `env-interval-ticks` only throttles environmental damage.
 
-### Action bar / Boss bar
+### Action bar / boss bar
 
 ```yaml
 actionbar:
@@ -67,10 +72,12 @@ bossbar:
   hide-after-ticks: 70
   min-max-health: 0      # 0 = all mobs
   dynamic-color: true
-  high-percent: 50       # >50% green
-  mid-percent: 25        # >25% yellow, else red
+  high-percent: 50       # above this: green
+  mid-percent: 25        # above this: yellow, else red
   overlay: NOTCHED_10
 ```
+
+These need a **viewer** (the attacker, or the player using look-at).
 
 ## Styles & formats
 
@@ -91,8 +98,8 @@ styles:
     look-at-bossbar: "<white><name></white>  …"
 ```
 
-When `style: bar` / `hearts` / `numeric`, the matching `styles.*` templates are used.  
-Look-at (0 damage) uses `look-at-actionbar` / `look-at-bossbar` so the bar does not show `-0`.
+When `style` is `bar`, `hearts`, or `numeric`, the matching `styles.*` templates are used.  
+Look-at (zero damage) uses `look-at-actionbar` / `look-at-bossbar`.
 
 ## Blacklist
 
@@ -107,5 +114,3 @@ blacklist:
 
 players: false   # show on players
 ```
-
-After edits: `/lh reload`.

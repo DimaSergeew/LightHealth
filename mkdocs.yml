@@ -12,15 +12,15 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: green
-      accent: light-green
+      primary: custom
+      accent: custom
       toggle:
         icon: material/weather-night
         name: Dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: green
-      accent: light-green
+      primary: custom
+      accent: custom
       toggle:
         icon: material/weather-sunny
         name: Light mode
@@ -29,18 +29,28 @@ theme:
     code: JetBrains Mono
   features:
     - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.sections
     - navigation.top
     - navigation.footer
+    - navigation.path
     - search.suggest
     - search.highlight
     - content.code.copy
     - content.tabs.link
+    - content.tooltips
     - toc.follow
   logo: assets/icon.png
   favicon: assets/icon.png
   icon:
     repo: fontawesome/brands/github
+    admonition:
+      note: material/information-outline
+      tip: material/lightbulb-on-outline
+      warning: material/alert-outline
 
 plugins:
   - search
@@ -71,12 +81,24 @@ extra_css:
 
 extra:
   generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/DimaSergeew/LightHealth
+      name: GitHub
+    - icon: fontawesome/solid/cube
+      link: https://modrinth.com/plugin/lighthealth
+      name: Modrinth
+    - icon: fontawesome/solid/book
+      link: https://dimasergeew.github.io/LightHealth/
+      name: Documentation
 
 nav:
   - Home: index.md
-  - Install: install.md
-  - Commands: commands.md
-  - Config: config.md
-  - Look-at: look-at.md
-  - Languages: languages.md
+  - Get started:
+      - Install: install.md
+      - Commands: commands.md
+      - Languages: languages.md
+  - Configure:
+      - Config: config.md
+      - Look-at: look-at.md
   - FAQ: faq.md

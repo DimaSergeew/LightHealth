@@ -1,17 +1,17 @@
 # Commands & permissions
 
+Aliases: `/lh`, `/lighthealth`, `/mhp`.
+
 ## Commands
 
 | Command | Permission | Description |
 |---------|------------|-------------|
-| `/lh` · `/lighthealth` · `/mhp` | — | Help |
-| `/lh toggle` | `lighthealth.toggle` | Personal feedback on/off (saved across quit; actionbar, bossbar, look-at; your hits skip holograms & damage numbers) |
-| `/lh reload` | `lighthealth.admin` | Reload config + messages |
-| `/lh lang <code>` | `lighthealth.admin` | Set language |
+| `/lh` | — | Show help |
+| `/lh toggle` | `lighthealth.toggle` | Turn your personal feedback on or off |
+| `/lh reload` | `lighthealth.admin` | Reload config and messages |
+| `/lh lang <code>` | `lighthealth.admin` | Set the plugin language |
 
-Aliases: `lh`, `mhp`, `lighthealth`, `language`
-
-### Languages
+`/lh language` is an alias of `/lh lang`. Language codes tab-complete.
 
 ```text
 /lh lang en
@@ -20,17 +20,23 @@ Aliases: `lh`, `mhp`, `lighthealth`, `language`
 /lh lang zh
 ```
 
-Tab-complete is available for language codes.
+!!! note "What `/lh toggle` actually turns off"
+    The preference is saved in `player-toggles.yml` and survives quit and restart.
+
+    - Your action bar, boss bar, and look-at
+    - Holograms and damage numbers **spawned by your hits**
+
+    A hologram from another player’s hit — or from fire, cactus, and similar — can still be visible. See [FAQ](faq.md).
 
 ## Permissions
 
 | Permission | Default | Description |
 |------------|---------|-------------|
-| `lighthealth.see` | `true` | Receive personal feedback and spawn holograms/numbers from your hits |
+| `lighthealth.see` | `true` | Receive personal bars and spawn holograms / numbers from your hits |
 | `lighthealth.toggle` | `true` | Use `/lh toggle` |
-| `lighthealth.admin` | `op` | Reload & language |
+| `lighthealth.admin` | `op` | Reload and language |
 
-### LuckPerms example
+### LuckPerms
 
 ```text
 lp group default permission set lighthealth.see true

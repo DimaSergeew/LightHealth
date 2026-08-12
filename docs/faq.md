@@ -1,62 +1,65 @@
 # FAQ
 
-## Style / look-at changes do nothing
+??? question "Style or look-at changes do nothing"
 
-Reload config: `/lh reload`.  
-On startup / reload, missing keys from newer versions are merged into `config.yml` without overwriting your values.
+    Run `/lh reload`.
 
-## Boss bar / action bar never show
+    On startup and reload, missing keys from newer plugin versions are merged into `config.yml` without overwriting your values.
 
-They need a **viewer** — the attacking player (or look-at player). Environmental damage without a player damager won't open personal bars.
+??? question "The boss bar or action bar never shows"
 
-Also check:
+    They need a **viewer** — the attacking player, or the player looking at the mob. Environmental damage with no player damager will not open personal bars.
 
-```yaml
-display:
-  actionbar: true
-  bossbar: true
-```
+    Also check:
 
-And that you did not run `/lh toggle` off, and have `lighthealth.see`.
+    ```yaml
+    display:
+      actionbar: true
+      bossbar: true
+    ```
 
-## `/lh toggle` still shows holograms from other players
+    And that `/lh toggle` is on, and the player has `lighthealth.see`.
 
-Toggle is **per player** and is saved in `player-toggles.yml` (survives quit and restart). It turns off:
+??? question "`/lh toggle` still shows holograms from other players"
 
-- your actionbar / bossbar / look-at
-- holograms and damage numbers **spawned by your hits**
+    Toggle is **per player** and is saved in `player-toggles.yml`. It turns off:
 
-If another player hits a mob, their hologram is a world `TextDisplay` and may still be visible. Environmental damage (fire, cactus) can still spawn a hologram with no player viewer.
+    - your action bar, boss bar, and look-at
+    - holograms and damage numbers **spawned by your hits**
 
-## Holograms lag on farms
+    If another player hits a mob, their hologram is a world `TextDisplay` and may still be visible. Fire, cactus, and other environmental damage can still spawn a hologram with no player viewer.
 
-```yaml
-hologram:
-  only-when-damaged: true
-  hide-after-ticks: 30
-  view-distance: 12
-```
+??? question "Holograms lag on farms"
 
-Holograms ride the mob (no per-tick teleport). Raise `damage-numbers` view-distance carefully; prefer lower.
+    ```yaml
+    hologram:
+      only-when-damaged: true
+      hide-after-ticks: 30
+      view-distance: 12
+    ```
 
-## Which servers are supported?
+    Ordinary mobs carry the hologram as a passenger (no per-tick teleport). Rideable mobs and players are followed in world space instead, so you can still mount them.
 
-**Paper, Purpur, and Folia** (1.21+ / Paper 26.x). No hard dependencies.
+    Keep `damage-numbers` view-distance modest on large farms. Environmental numbers are throttled by `env-interval-ticks` (default `10`).
 
-This is a Paper plugin (`paper-plugin.yml`, Brigadier, Folia schedulers). It will **not** load on CraftBukkit / Spigot.
+??? question "Which servers are supported?"
 
-## Folia
+    **Paper, Purpur, and Folia** (1.21+ / Paper 26.x). No hard dependencies.
 
-Supported. Scheduling uses entity/global region schedulers. Floating damage numbers are cleaned up on entity death/remove (no orphan TextDisplays).
+    This is a Paper plugin (`paper-plugin.yml`, Brigadier, Folia schedulers). It will **not** load on CraftBukkit or Spigot.
 
-## Does it rewrite mob names?
+??? question "Does Folia work?"
 
-No. Holograms use **TextDisplay**, not the entity custom name.
+    Yes. Scheduling uses entity and global region schedulers. Floating damage numbers are cleaned up when the entity is removed, so they should not leave orphan `TextDisplay`s.
 
-## Java version
+??? question "Does it rewrite mob names?"
 
-Minecraft **1.21+ / Paper 26.x** needs **Java 25+**. Older Java will fail to load the plugin.
+    No. Holograms use a **TextDisplay**, not the entity custom name.
 
-## Where to report issues
+??? question "Which Java version?"
 
-[GitHub Issues](https://github.com/DimaSergeew/LightHealth/issues)
+    Minecraft **1.21+ / Paper 26.x** needs **Java 25+**. Older Java will fail to load the plugin.
+
+??? question "Where do I report issues?"
+
+    [GitHub Issues](https://github.com/DimaSergeew/LightHealth/issues)

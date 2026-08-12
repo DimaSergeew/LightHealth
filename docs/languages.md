@@ -1,6 +1,6 @@
 # Languages
 
-Built-in locales:
+Built-in locales for plugin messages (`/lh` help, reload, toggle, errors).
 
 | Code | Language |
 |------|----------|
@@ -11,17 +11,21 @@ Built-in locales:
 
 ## Switch language
 
-**Config**
+Set it in `config.yml`:
 
 ```yaml
 language: ru
 ```
 
-**Command** (admin)
+Or as an admin:
 
 ```text
 /lh lang ru
 ```
+
+`/lh lang` writes only the `language:` line, so the rest of your config comments stay intact.
+
+## Customize messages
 
 Files are extracted to:
 
@@ -33,6 +37,6 @@ plugins/LightHealth/lang/
   zh.yml
 ```
 
-Missing keys fall back to **English**.
+Edit those YAML files — MiniMessage is supported. Missing keys fall back to **English**.
 
-Edit the YAML files to customize messages (MiniMessage supported).
+On startup or `/lh reload`, new keys from a plugin update are merged in without overwriting your custom lines.

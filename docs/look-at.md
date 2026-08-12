@@ -1,6 +1,6 @@
 # Look-at
 
-Show HP while the player is **looking at** a mob (raycast). No damage required.
+Show health while the player is **aiming at** a mob. No damage is required.
 
 ## Config
 
@@ -18,16 +18,21 @@ look-at:
 | Key | Meaning |
 |-----|---------|
 | `enabled` | Master switch |
-| `range` | Max look distance (blocks) |
-| `interval-ticks` | How often to scan (lower = smoother, more work) |
+| `range` | Maximum look distance, in blocks |
+| `interval-ticks` | How often to scan (lower is smoother, more work) |
 | `show.*` | Which channels to use on look-at |
 
-Look-at channels are independent of `display.*` for damage — you can show a hologram on look-at even if you use different damage channels.
+Look-at channels are independent of `display.*`. You can show a hologram on look-at even if damage uses a different set of channels.
 
-The raycast hits **blocks**. You cannot read HP through walls. Looking away hides look-at holograms / bars immediately (a damage hologram on the same mob is left until its own hide timer).
+Zero-damage look-at uses `look-at-actionbar` / `look-at-bossbar` templates, so the bar does not print `-0`. See [Config](config.md).
+
+!!! note "Line of sight"
+    The raycast hits **solid blocks**. You cannot read health through walls.
+
+    Looking away hides look-at holograms and bars immediately. A **damage** hologram on the same mob stays until its own hide timer.
 
 ## Tips
 
-- Keep `interval-ticks` around `4–8` for busy servers
-- Prefer `hologram` + `actionbar`; leave bossbar off unless needed
-- Respects `lighthealth.see` and `/lh toggle`
+- Keep `interval-ticks` around `4–8` on busy servers.
+- Prefer hologram + action bar; leave the boss bar off unless you need it.
+- Look-at respects `lighthealth.see` and `/lh toggle`.
