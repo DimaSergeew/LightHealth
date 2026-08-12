@@ -31,8 +31,10 @@ hologram:
   only-when-damaged: true  # skips 0-damage hits for hologram only (not numbers/bars)
   hide-after-ticks: 40
   view-distance: 16
-  y-offset: 0.35
+  y-offset: 0.35           # above attachment (mounted) or above the head (follow)
 ```
+
+Rideable mobs (horses, pigs, striders, camels, …) and players are **not** mounted — the hologram follows in world space so you can still ride them. The killing-blow bar stays until hide/remove.
 
 ### Damage numbers
 
@@ -42,6 +44,7 @@ damage-numbers:
   rise-per-tick: 0.045
   base-scale: 1.15
   crit-scale: 1.5
+  env-interval-ticks: 10   # throttle fire/poison/cactus numbers; 0 = off
   tiers:
     - max: 2
       format: "<#B0B0B0>-<amount></#B0B0B0>"
@@ -84,9 +87,12 @@ styles:
     hologram: "<bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
     actionbar: "<white><name></white> <bar> … <red>-<amount></red>"
     bossbar: "<white><name></white>  …  <red>-<amount></red>"
+    look-at-actionbar: "<white><name></white> <bar> …"   # no -<amount>
+    look-at-bossbar: "<white><name></white>  …"
 ```
 
-When `style: bar` / `hearts` / `numeric`, the matching `styles.*` templates are used.
+When `style: bar` / `hearts` / `numeric`, the matching `styles.*` templates are used.  
+Look-at (0 damage) uses `look-at-actionbar` / `look-at-bossbar` so the bar does not show `-0`.
 
 ## Blacklist
 

@@ -28,10 +28,21 @@ public final class Schedulers {
 
     public static void entity(final Plugin plugin, final Entity entity, final Runnable task) {
         if (FOLIA) {
+            try {
+                if (Bukkit.isOwnedByCurrentRegion(entity)) {
+                    task.run();
+                    return;
+                }
+            } catch (final RuntimeException ignored) {
+            }
             entity.getScheduler().run(plugin, scheduled -> task.run(), null);
-        } else {
-            Bukkit.getScheduler().runTask(plugin, task);
+            return;
         }
+        if (Bukkit.isPrimaryThread()) {
+            task.run();
+            return;
+        }
+        Bukkit.getScheduler().runTask(plugin, task);
     }
 
     public static void entityDelayed(

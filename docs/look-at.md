@@ -24,6 +24,8 @@ look-at:
 
 Look-at channels are independent of `display.*` for damage — you can show a hologram on look-at even if you use different damage channels.
 
+The raycast hits **blocks**. You cannot read HP through walls. Looking away hides look-at holograms / bars immediately (a damage hologram on the same mob is left until its own hide timer).
+
 ## Tips
 
 - Keep `interval-ticks` around `4–8` for busy servers

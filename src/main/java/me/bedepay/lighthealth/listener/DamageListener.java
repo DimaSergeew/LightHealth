@@ -12,11 +12,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityRemoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.projectiles.ProjectileSource;
 import org.jspecify.annotations.Nullable;
+
+import java.util.UUID;
 
 public final class DamageListener implements Listener {
 
@@ -44,19 +45,19 @@ public final class DamageListener implements Listener {
         plugin.displays().onDamage(living, healthAfter, max, damage, critical, viewer);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onDeath(final EntityDeathEvent event) {
-        plugin.displays().onEntityRemove(event.getEntity().getUniqueId());
-    }
-
     @EventHandler
     public void onRemove(final EntityRemoveEvent event) {
+        if (!(event.getEntity() instanceof LivingEntity)) {
+            return;
+        }
         plugin.displays().onEntityRemove(event.getEntity().getUniqueId());
     }
 
     @EventHandler
     public void onQuit(final PlayerQuitEvent event) {
-        plugin.displays().onPlayerQuit(event.getPlayer().getUniqueId());
+        final UUID id = event.getPlayer().getUniqueId();
+        plugin.displays().onPlayerQuit(id);
+        plugin.lookAt().clearPlayer(id);
     }
 
     private static @Nullable Player resolveViewer(final EntityDamageEvent event) {

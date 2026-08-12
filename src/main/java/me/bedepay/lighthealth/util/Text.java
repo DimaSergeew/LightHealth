@@ -16,6 +16,13 @@ public final class Text {
     }
 
     public static Component mm(final String input, final TagResolver... resolvers) {
-        return MM.deserialize(input, resolvers);
+        if (input == null || input.isEmpty()) {
+            return Component.empty();
+        }
+        try {
+            return MM.deserialize(input, resolvers);
+        } catch (final RuntimeException ignored) {
+            return Component.text(input);
+        }
     }
 }

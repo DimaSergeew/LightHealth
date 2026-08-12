@@ -15,7 +15,7 @@ import java.util.List;
 
 public final class LightHealth extends JavaPlugin {
 
-    private PluginConfig config;
+    private volatile PluginConfig config;
     private Messages messages;
     private PlayerPrefs prefs;
     private DisplayService displays;
@@ -27,7 +27,7 @@ public final class LightHealth extends JavaPlugin {
 
         this.config = PluginConfig.load(this);
         this.messages = new Messages(this);
-        this.prefs = new PlayerPrefs();
+        this.prefs = new PlayerPrefs(this);
         this.displays = new DisplayService(this);
         this.lookAt = new LookAtService(this);
 
@@ -88,5 +88,9 @@ public final class LightHealth extends JavaPlugin {
 
     public DisplayService displays() {
         return displays;
+    }
+
+    public LookAtService lookAt() {
+        return lookAt;
     }
 }

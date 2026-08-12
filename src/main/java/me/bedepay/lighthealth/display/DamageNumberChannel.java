@@ -26,6 +26,8 @@ public final class DamageNumberChannel {
     private final LightHealth plugin;
     /** Victim entity id → active floating numbers (for death/remove cleanup). */
     private final Map<UUID, Set<ActiveNumber>> byVictim = new ConcurrentHashMap<>();
+    private final Map<UUID, Long> lastEnvTick = new ConcurrentHashMap<>();
+    private final AtomicInteger lifetime = new AtomicInteger();
 
     public DamageNumberChannel(final LightHealth plugin) {
         this.plugin = plugin;
@@ -45,6 +47,18 @@ public final class DamageNumberChannel {
         if (!entity.isValid()) {
             return;
         }
+        final UUID victimId = entity.getUniqueId();
+        if (snap.viewer() == null) {
+            final int interval = cfg.damageEnvIntervalTicks();
+            if (interval > 0) {
+                final long now = plugin.getServer().getCurrentTick();
+                final Long prev = this.lastEnvTick.get(victimId);
+                if (prev != null && now - prev < interval) {
+                    return;
+                }
+                this.lastEnvTick.put(victimId, now);
+            }
+        }
 
         final boolean crit = snap.critical();
         final Component text = format.damage(
@@ -55,8 +69,13 @@ public final class DamageNumberChannel {
                 ? Math.min(cfg.damageDurationTicks() + 6, cfg.damageDurationTicks() * 2)
                 : cfg.damageDurationTicks();
 
-        final UUID victimId = entity.getUniqueId();
-        Schedulers.entity(plugin, entity, () -> spawn(entity, victimId, text, cfg, scale, rise, duration));
+        final int gen = this.lifetime.get();
+        Schedulers.entity(plugin, entity, () -> {
+            if (this.lifetime.get() != gen) {
+                return;
+            }
+            spawn(entity, victimId, text, cfg, scale, rise, duration);
+        });
     }
 
     private void spawn(
@@ -115,6 +134,7 @@ public final class DamageNumberChannel {
     }
 
     public void removeVictim(final UUID victimId) {
+        this.lastEnvTick.remove(victimId);
         final Set<ActiveNumber> set = this.byVictim.remove(victimId);
         if (set == null) {
             return;
@@ -141,10 +161,12 @@ public final class DamageNumberChannel {
     }
 
     public void shutdown() {
+        this.lifetime.incrementAndGet();
         for (final UUID id : this.byVictim.keySet().toArray(UUID[]::new)) {
             removeVictim(id);
         }
         this.byVictim.clear();
+        this.lastEnvTick.clear();
     }
 
     private static final class ActiveNumber {

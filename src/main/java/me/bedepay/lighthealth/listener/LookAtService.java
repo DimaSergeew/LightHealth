@@ -5,14 +5,20 @@ import me.bedepay.lighthealth.config.LookAtSettings;
 import me.bedepay.lighthealth.util.Schedulers;
 import me.bedepay.lighthealth.util.ViewAccess;
 import org.bukkit.Bukkit;
+import org.bukkit.FluidCollisionMode;
 import org.bukkit.GameMode;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.RayTraceResult;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 public final class LookAtService {
 
     private final LightHealth plugin;
+    private final Map<UUID, UUID> lastTarget = new ConcurrentHashMap<>();
     private Object task;
 
     public LookAtService(final LightHealth plugin) {
@@ -32,6 +38,16 @@ public final class LookAtService {
     public void stop() {
         Schedulers.cancel(this.task);
         this.task = null;
+        for (final UUID playerId : this.lastTarget.keySet().toArray(UUID[]::new)) {
+            clearPlayer(playerId);
+        }
+    }
+
+    public void clearPlayer(final UUID playerId) {
+        final UUID previous = this.lastTarget.remove(playerId);
+        if (previous != null) {
+            plugin.displays().hideLookAt(playerId, previous);
+        }
     }
 
     private void tick() {
@@ -52,32 +68,48 @@ public final class LookAtService {
 
     private void checkPlayer(final Player player, final LookAtSettings settings) {
         if (!player.isOnline() || !ViewAccess.canSee(plugin, player)) {
+            clearPlayer(player.getUniqueId());
             return;
         }
         final LivingEntity target = findTarget(player, settings.range());
+        final UUID playerId = player.getUniqueId();
+        final UUID previous = this.lastTarget.get(playerId);
         if (target == null) {
+            if (previous != null) {
+                this.lastTarget.remove(playerId, previous);
+                plugin.displays().hideLookAt(playerId, previous);
+            }
             return;
         }
-        plugin.displays().onLookAt(target, player, settings);
+        final UUID targetId = target.getUniqueId();
+        if (previous != null && !previous.equals(targetId)) {
+            plugin.displays().hideLookAt(playerId, previous);
+        }
+        this.lastTarget.put(playerId, targetId);
+        Schedulers.entity(plugin, target, () -> {
+            if (!target.isValid() || !player.isOnline() || !ViewAccess.canSee(plugin, player)) {
+                return;
+            }
+            plugin.displays().onLookAt(target, player, settings);
+        });
     }
 
     private static LivingEntity findTarget(final Player player, final int range) {
-        final RayTraceResult hit = player.getWorld().rayTraceEntities(
+        final RayTraceResult hit = player.getWorld().rayTrace(
                 player.getEyeLocation(),
                 player.getEyeLocation().getDirection(),
                 range,
+                FluidCollisionMode.NEVER,
+                true,
                 0.4,
                 entity -> entity instanceof LivingEntity living
                         && living.isValid()
                         && !living.isDead()
                         && !entity.equals(player)
         );
-        if (hit == null) {
+        if (hit == null || !(hit.getHitEntity() instanceof LivingEntity living)) {
             return null;
         }
-        if (hit.getHitEntity() instanceof LivingEntity living) {
-            return living;
-        }
-        return null;
+        return living;
     }
 }

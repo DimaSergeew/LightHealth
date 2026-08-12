@@ -7,6 +7,9 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.Nullable;
 
+import java.util.UUID;
+import java.util.logging.Level;
+
 public final class DisplayService {
 
     private final LightHealth plugin;
@@ -57,16 +60,16 @@ public final class DisplayService {
                 && (damageAmount > 0.0 || !cfg.hologramOnlyWhenDamaged());
 
         if (showHologram) {
-            this.hologram.handle(snap, this.format, true);
+            safe("hologram", () -> this.hologram.handle(snap, this.format, true));
         }
         if (cfg.damageNumbers()) {
-            this.damageNumbers.handle(snap, this.format);
+            safe("numbers", () -> this.damageNumbers.handle(snap, this.format));
         }
         if (cfg.actionbar()) {
-            this.actionbar.handle(snap, this.format, true);
+            safe("actionbar", () -> this.actionbar.handle(snap, this.format, true));
         }
         if (cfg.bossbar()) {
-            this.bossbar.handle(snap, this.format, true);
+            safe("bossbar", () -> this.bossbar.handle(snap, this.format, true));
         }
     }
 
@@ -81,13 +84,27 @@ public final class DisplayService {
         final HealthSnapshot snap = new HealthSnapshot(entity, health, max, 0.0, false, viewer);
 
         if (lookAt.hologram()) {
-            this.hologram.handle(snap, this.format, false);
+            safe("look-hologram", () -> this.hologram.handle(snap, this.format, false));
         }
         if (lookAt.actionbar()) {
-            this.actionbar.handle(snap, this.format, false);
+            safe("look-actionbar", () -> this.actionbar.handle(snap, this.format, false));
         }
         if (lookAt.bossbar()) {
-            this.bossbar.handle(snap, this.format, false);
+            safe("look-bossbar", () -> this.bossbar.handle(snap, this.format, false));
+        }
+    }
+
+    public void hideLookAt(final UUID playerId, final UUID entityId) {
+        this.hologram.hideIfLookAt(entityId);
+        this.actionbar.hideIfLookAt(playerId);
+        this.bossbar.hideIfLookAt(playerId);
+    }
+
+    private void safe(final String channel, final Runnable action) {
+        try {
+            action.run();
+        } catch (final RuntimeException e) {
+            plugin.getLogger().log(Level.WARNING, "LightHealth " + channel + " failed", e);
         }
     }
 
@@ -101,18 +118,17 @@ public final class DisplayService {
         return !(entity instanceof Player) || cfg.showPlayers();
     }
 
-    public void onEntityRemove(final java.util.UUID entityId) {
+    public void onEntityRemove(final UUID entityId) {
         this.hologram.remove(entityId);
         this.damageNumbers.removeVictim(entityId);
     }
 
-    public void onPlayerQuit(final java.util.UUID playerId) {
+    public void onPlayerQuit(final UUID playerId) {
         this.bossbar.removePlayer(playerId);
         this.actionbar.removePlayer(playerId);
-        this.plugin.prefs().clearPlayer(playerId);
     }
 
-    public void clearPersonal(final java.util.UUID playerId) {
+    public void clearPersonal(final UUID playerId) {
         this.bossbar.removePlayer(playerId);
         this.actionbar.removePlayer(playerId);
     }

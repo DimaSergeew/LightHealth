@@ -3,15 +3,23 @@ package me.bedepay.lighthealth.config;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.logging.Level;
 
 public final class PluginConfig {
 
@@ -38,6 +46,7 @@ public final class PluginConfig {
     private final double damageViewDistance;
     private final float damageBaseScale;
     private final float damageCritScale;
+    private final int damageEnvIntervalTicks;
     private final List<DamageTier> damageTiers;
     private final boolean critEnabled;
     private final String critSymbol;
@@ -57,6 +66,8 @@ public final class PluginConfig {
     private final String formatDamage;
     private final String formatActionbar;
     private final String formatBossbar;
+    private final String formatLookAtActionbar;
+    private final String formatLookAtBossbar;
 
     private final String heartFull;
     private final String heartEmpty;
@@ -87,6 +98,7 @@ public final class PluginConfig {
             final double damageViewDistance,
             final float damageBaseScale,
             final float damageCritScale,
+            final int damageEnvIntervalTicks,
             final List<DamageTier> damageTiers,
             final boolean critEnabled,
             final String critSymbol,
@@ -103,6 +115,8 @@ public final class PluginConfig {
             final String formatDamage,
             final String formatActionbar,
             final String formatBossbar,
+            final String formatLookAtActionbar,
+            final String formatLookAtBossbar,
             final String heartFull,
             final String heartEmpty,
             final double hpPerHeart,
@@ -130,6 +144,7 @@ public final class PluginConfig {
         this.damageViewDistance = damageViewDistance;
         this.damageBaseScale = damageBaseScale;
         this.damageCritScale = damageCritScale;
+        this.damageEnvIntervalTicks = damageEnvIntervalTicks;
         this.damageTiers = List.copyOf(damageTiers);
         this.critEnabled = critEnabled;
         this.critSymbol = critSymbol;
@@ -146,6 +161,8 @@ public final class PluginConfig {
         this.formatDamage = formatDamage;
         this.formatActionbar = formatActionbar;
         this.formatBossbar = formatBossbar;
+        this.formatLookAtActionbar = formatLookAtActionbar;
+        this.formatLookAtBossbar = formatLookAtBossbar;
         this.heartFull = heartFull;
         this.heartEmpty = heartEmpty;
         this.hpPerHeart = hpPerHeart;
@@ -162,53 +179,74 @@ public final class PluginConfig {
 
     public static PluginConfig load(final JavaPlugin plugin) {
         plugin.saveDefaultConfig();
+        mergeMissingKeys(plugin);
         plugin.reloadConfig();
         final FileConfiguration c = plugin.getConfig();
 
-        final Style style = parseStyle(c.getString("style", "bar"));
+        final Style style = parseStyle(plugin, c.getString("style", "bar"));
 
-        final String customHolo = c.getString("format.hologram",
+        final String customHolo = str(c, "format.hologram",
                 "<bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>");
-        final String customDmg = c.getString("format.damage", "<#FF5252>-<amount></#FF5252>");
-        final String customAb = c.getString("format.actionbar",
+        final String customDmg = str(c, "format.damage", "<#FF5252>-<amount></#FF5252>");
+        final String customAb = str(c, "format.actionbar",
                 "<white><name></white> <bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray> <red>-<amount></red>");
-        final String customBb = c.getString("format.bossbar",
+        final String customBb = str(c, "format.bossbar",
                 "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>  <red>-<amount></red>");
+        final String customLookAb = str(c, "format.look-at-actionbar",
+                "<white><name></white> <bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>");
+        final String customLookBb = str(c, "format.look-at-bossbar",
+                "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>");
 
         final String fmtHolo;
         final String fmtAb;
         final String fmtBb;
+        final String fmtLookAb;
+        final String fmtLookBb;
         final String fmtDmg = customDmg;
 
         switch (style) {
             case HEARTS -> {
-                fmtHolo = c.getString("styles.hearts.hologram",
+                fmtHolo = str(c, "styles.hearts.hologram",
                         "<hearts> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>");
-                fmtAb = c.getString("styles.hearts.actionbar",
+                fmtAb = str(c, "styles.hearts.actionbar",
                         "<white><name></white> <hearts> <white><health></white><dark_gray>/</dark_gray><gray><max></gray> <red>-<amount></red>");
-                fmtBb = c.getString("styles.hearts.bossbar",
+                fmtBb = str(c, "styles.hearts.bossbar",
                         "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>  <red>-<amount></red>");
+                fmtLookAb = str(c, "styles.hearts.look-at-actionbar",
+                        "<white><name></white> <hearts> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>");
+                fmtLookBb = str(c, "styles.hearts.look-at-bossbar",
+                        "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>");
             }
             case BAR -> {
-                fmtHolo = c.getString("styles.bar.hologram",
+                fmtHolo = str(c, "styles.bar.hologram",
                         "<bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>");
-                fmtAb = c.getString("styles.bar.actionbar",
+                fmtAb = str(c, "styles.bar.actionbar",
                         "<white><name></white> <bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray> <red>-<amount></red>");
-                fmtBb = c.getString("styles.bar.bossbar",
+                fmtBb = str(c, "styles.bar.bossbar",
                         "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>  <red>-<amount></red>");
+                fmtLookAb = str(c, "styles.bar.look-at-actionbar",
+                        "<white><name></white> <bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>");
+                fmtLookBb = str(c, "styles.bar.look-at-bossbar",
+                        "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>");
             }
             case NUMERIC -> {
-                fmtHolo = c.getString("styles.numeric.hologram",
+                fmtHolo = str(c, "styles.numeric.hologram",
                         "<red>❤</red> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>");
-                fmtAb = c.getString("styles.numeric.actionbar",
+                fmtAb = str(c, "styles.numeric.actionbar",
                         "<white><name></white> <red>❤</red> <white><health></white><dark_gray>/</dark_gray><gray><max></gray> <red>-<amount></red>");
-                fmtBb = c.getString("styles.numeric.bossbar",
+                fmtBb = str(c, "styles.numeric.bossbar",
                         "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>  <red>-<amount></red>");
+                fmtLookAb = str(c, "styles.numeric.look-at-actionbar",
+                        "<white><name></white> <red>❤</red> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>");
+                fmtLookBb = str(c, "styles.numeric.look-at-bossbar",
+                        "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>");
             }
             default -> {
                 fmtHolo = customHolo;
                 fmtAb = customAb;
                 fmtBb = customBb;
+                fmtLookAb = customLookAb;
+                fmtLookBb = customLookBb;
             }
         }
 
@@ -226,6 +264,12 @@ public final class PluginConfig {
             worlds.add(w.toLowerCase(Locale.ROOT));
         }
 
+        final double[] thresholds = normalizeThresholds(
+                plugin,
+                c.getDouble("bossbar.high-percent", 50.0),
+                c.getDouble("bossbar.mid-percent", 25.0)
+        );
+
         return new PluginConfig(
                 style,
                 c.getBoolean("display.hologram", true),
@@ -241,7 +285,8 @@ public final class PluginConfig {
                 Math.max(1.0, c.getDouble("damage-numbers.view-distance", 16.0)),
                 (float) Math.max(0.1, c.getDouble("damage-numbers.base-scale", 1.15)),
                 (float) Math.max(0.1, c.getDouble("damage-numbers.crit-scale", 1.5)),
-                loadDamageTiers(c),
+                Math.max(0, c.getInt("damage-numbers.env-interval-ticks", 10)),
+                loadDamageTiers(plugin, c),
                 c.getBoolean("damage-numbers.crit.enabled", true),
                 c.getString("damage-numbers.crit.symbol", "✦"),
                 c.getString("damage-numbers.crit.format",
@@ -252,18 +297,20 @@ public final class PluginConfig {
                 parseColor(c.getString("bossbar.color", "GREEN")),
                 parseOverlay(c.getString("bossbar.overlay", "NOTCHED_10")),
                 c.getBoolean("bossbar.dynamic-color", true),
-                clampPercent(c.getDouble("bossbar.high-percent", 50.0)),
-                clampPercent(c.getDouble("bossbar.mid-percent", 25.0)),
+                thresholds[0],
+                thresholds[1],
                 fmtHolo,
                 fmtDmg,
                 fmtAb,
                 fmtBb,
-                c.getString("styles.hearts.full", "❤"),
-                c.getString("styles.hearts.empty", "❤"),
+                fmtLookAb,
+                fmtLookBb,
+                str(c, "styles.hearts.full", "❤"),
+                str(c, "styles.hearts.empty", "❤"),
                 Math.max(0.1, c.getDouble("styles.hearts.hp-per-heart", 2.0)),
                 Math.max(1, c.getInt("styles.hearts.max-icons", 10)),
-                c.getString("styles.bar.filled", "█"),
-                c.getString("styles.bar.empty", "░"),
+                str(c, "styles.bar.filled", "█"),
+                str(c, "styles.bar.empty", "░"),
                 Math.max(1, c.getInt("styles.bar.length", 12)),
                 Set.copyOf(banned),
                 Set.copyOf(worlds),
@@ -277,7 +324,103 @@ public final class PluginConfig {
         return Math.max(0.0, Math.min(100.0, value));
     }
 
-    private static List<DamageTier> loadDamageTiers(final FileConfiguration c) {
+    static double[] normalizeThresholds(final JavaPlugin plugin, final double highRaw, final double midRaw) {
+        double high = clampPercent(highRaw);
+        double mid = clampPercent(midRaw);
+        if (mid > high) {
+            if (plugin != null) {
+                plugin.getLogger().warning(
+                        "bossbar.mid-percent (" + midRaw + ") > high-percent (" + highRaw + "), swapping");
+            }
+            final double tmp = high;
+            high = mid;
+            mid = tmp;
+        }
+        return new double[] {high, mid};
+    }
+
+    private static String str(final FileConfiguration c, final String path, final String def) {
+        final String value = c.getString(path, def);
+        return value == null || value.isEmpty() ? def : value;
+    }
+
+    /**
+     * Add keys introduced in newer plugin versions without overwriting admin values.
+     */
+    private static void mergeMissingKeys(final JavaPlugin plugin) {
+        final InputStream stream = plugin.getResource("config.yml");
+        if (stream == null) {
+            return;
+        }
+        final YamlConfiguration defaults;
+        try (stream; final InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
+            defaults = YamlConfiguration.loadConfiguration(reader);
+        } catch (final IOException e) {
+            plugin.getLogger().log(Level.WARNING, "Could not read bundled config.yml", e);
+            return;
+        }
+        final File file = new File(plugin.getDataFolder(), "config.yml");
+        if (!file.isFile()) {
+            return;
+        }
+        final YamlConfiguration disk = YamlConfiguration.loadConfiguration(file);
+        boolean changed = false;
+        for (final String key : defaults.getKeys(true)) {
+            if (defaults.isConfigurationSection(key)) {
+                continue;
+            }
+            if (!disk.contains(key, true)) {
+                disk.set(key, defaults.get(key));
+                changed = true;
+            }
+        }
+        if (changed) {
+            try {
+                disk.save(file);
+                plugin.getLogger().info("Merged new config keys into config.yml");
+            } catch (final IOException e) {
+                plugin.getLogger().log(Level.WARNING, "Could not update config.yml with new keys", e);
+            }
+        }
+    }
+
+    /**
+     * Persist {@code language:} without rewriting the rest of config.yml.
+     */
+    public static void writeLanguage(final JavaPlugin plugin, final String code) {
+        final File file = new File(plugin.getDataFolder(), "config.yml");
+        if (file.isFile()) {
+            try {
+                final List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
+                boolean replaced = false;
+                for (int i = 0; i < lines.size(); i++) {
+                    final String line = lines.get(i);
+                    final String trimmed = line.trim();
+                    if (trimmed.isEmpty() || trimmed.startsWith("#")) {
+                        continue;
+                    }
+                    if (trimmed.startsWith("language:")) {
+                        final int idx = line.indexOf("language:");
+                        lines.set(i, line.substring(0, idx) + "language: " + code);
+                        replaced = true;
+                        break;
+                    }
+                }
+                if (replaced) {
+                    Files.write(file.toPath(), lines, StandardCharsets.UTF_8);
+                    plugin.reloadConfig();
+                    return;
+                }
+            } catch (final IOException e) {
+                plugin.getLogger().log(Level.WARNING, "Could not update language in config.yml", e);
+            }
+        }
+        plugin.reloadConfig();
+        plugin.getConfig().set("language", code);
+        plugin.saveConfig();
+    }
+
+    private static List<DamageTier> loadDamageTiers(final JavaPlugin plugin, final FileConfiguration c) {
         final List<DamageTier> tiers = new ArrayList<>();
         final List<java.util.Map<?, ?>> maps = c.getMapList("damage-numbers.tiers");
         if (!maps.isEmpty()) {
@@ -287,8 +430,14 @@ public final class PluginConfig {
                 if (maxObj == null || fmtObj == null) {
                     continue;
                 }
-                final double max = maxObj instanceof Number n ? n.doubleValue() : Double.parseDouble(maxObj.toString());
-                tiers.add(new DamageTier(max, fmtObj.toString()));
+                try {
+                    final double max = maxObj instanceof Number n
+                            ? n.doubleValue()
+                            : Double.parseDouble(maxObj.toString());
+                    tiers.add(new DamageTier(max, fmtObj.toString()));
+                } catch (final NumberFormatException e) {
+                    plugin.getLogger().warning("Invalid damage-numbers.tiers max: " + maxObj);
+                }
             }
         } else {
             final ConfigurationSection section = c.getConfigurationSection("damage-numbers.tiers");
@@ -298,7 +447,8 @@ public final class PluginConfig {
                     if (tier == null) {
                         continue;
                     }
-                    tiers.add(new DamageTier(tier.getDouble("max", 99999), tier.getString("format", "<red>-<amount></red>")));
+                    final String format = tier.getString("format", "<red>-<amount></red>");
+                    tiers.add(new DamageTier(tier.getDouble("max", 99999), format == null ? "<red>-<amount></red>" : format));
                 }
             }
         }
@@ -306,10 +456,14 @@ public final class PluginConfig {
         return tiers;
     }
 
-    private static Style parseStyle(final String raw) {
+    private static Style parseStyle(final JavaPlugin plugin, final String raw) {
+        if (raw == null || raw.isBlank()) {
+            return Style.BAR;
+        }
         try {
             return Style.valueOf(raw.trim().toUpperCase(Locale.ROOT));
         } catch (final Exception e) {
+            plugin.getLogger().warning("Unknown style '" + raw + "', using bar");
             return Style.BAR;
         }
     }
@@ -419,6 +573,10 @@ public final class PluginConfig {
         return damageViewDistance;
     }
 
+    public int damageEnvIntervalTicks() {
+        return damageEnvIntervalTicks;
+    }
+
     public String critSymbol() {
         return critSymbol;
     }
@@ -461,6 +619,14 @@ public final class PluginConfig {
 
     public String formatBossbar() {
         return formatBossbar;
+    }
+
+    public String formatLookAtActionbar() {
+        return formatLookAtActionbar;
+    }
+
+    public String formatLookAtBossbar() {
+        return formatLookAtBossbar;
     }
 
     public String heartFull() {

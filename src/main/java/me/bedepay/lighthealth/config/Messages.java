@@ -24,10 +24,10 @@ public final class Messages {
     public static final Set<String> SUPPORTED = Set.of("en", "ru", "es", "zh");
 
     private final JavaPlugin plugin;
-    private FileConfiguration primary;
-    private FileConfiguration fallback;
-    private String prefix;
-    private String activeLanguage = "en";
+    private volatile FileConfiguration primary;
+    private volatile FileConfiguration fallback;
+    private volatile String prefix;
+    private volatile String activeLanguage = "en";
 
     public Messages(final JavaPlugin plugin) {
         this.plugin = plugin;
@@ -112,8 +112,13 @@ public final class Messages {
         if (stream == null) {
             return;
         }
-        final YamlConfiguration defaults = YamlConfiguration.loadConfiguration(
-                new InputStreamReader(stream, StandardCharsets.UTF_8));
+        final YamlConfiguration defaults;
+        try (stream; final InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
+            defaults = YamlConfiguration.loadConfiguration(reader);
+        } catch (final IOException e) {
+            this.plugin.getLogger().log(Level.WARNING, "Could not read bundled locale " + resourcePath, e);
+            return;
+        }
         final YamlConfiguration disk = YamlConfiguration.loadConfiguration(diskFile);
         boolean changed = false;
         for (final String key : defaults.getKeys(true)) {
@@ -142,7 +147,11 @@ public final class Messages {
         }
         final InputStream stream = this.plugin.getResource("lang/" + code + ".yml");
         if (stream != null) {
-            return YamlConfiguration.loadConfiguration(new InputStreamReader(stream, StandardCharsets.UTF_8));
+            try (stream; final InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)) {
+                return YamlConfiguration.loadConfiguration(reader);
+            } catch (final IOException e) {
+                this.plugin.getLogger().log(Level.WARNING, "Could not read bundled locale " + code, e);
+            }
         }
         return new YamlConfiguration();
     }

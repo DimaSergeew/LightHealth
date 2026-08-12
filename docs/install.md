@@ -4,7 +4,7 @@
 
 | | |
 |--|--|
-| Server | **Spigot / Paper / Purpur / Folia** **1.21+** (modern Paper **26.x** supported) |
+| Server | **Paper / Purpur / Folia** **1.21+** (modern Paper **26.x** supported) |
 | Java | **25+** |
 | Dependencies | **None** |
 
@@ -20,7 +20,7 @@
 
 ```bash
 ./gradlew build
-# → build/libs/LightHealth-1.0.0.jar
+# → build/libs/LightHealth-1.0.2.jar
 ```
 
 ## First run

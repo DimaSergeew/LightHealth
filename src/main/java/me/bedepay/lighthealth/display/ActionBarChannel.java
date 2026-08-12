@@ -16,6 +16,8 @@ public final class ActionBarChannel {
 
     private final LightHealth plugin;
     private final Map<UUID, AtomicInteger> generations = new ConcurrentHashMap<>();
+    private final Map<UUID, Boolean> lastFromDamage = new ConcurrentHashMap<>();
+    private final AtomicInteger lifetime = new AtomicInteger();
 
     public ActionBarChannel(final LightHealth plugin) {
         this.plugin = plugin;
@@ -25,16 +27,17 @@ public final class ActionBarChannel {
         handle(snap, format, true);
     }
 
-    public void handle(final HealthSnapshot snap, final FormatService format, final boolean requireDisplayEnabled) {
+    public void handle(final HealthSnapshot snap, final FormatService format, final boolean fromDamage) {
         final PluginConfig cfg = plugin.config();
-        if (requireDisplayEnabled && !cfg.actionbar()) {
+        if (fromDamage && !cfg.actionbar()) {
             return;
         }
         final Player viewer = snap.viewer();
-        if (viewer == null || !ViewAccess.canSee(plugin, viewer)) {
+        if (viewer == null) {
             return;
         }
 
+        // Format on the entity's thread (name / attributes), then hop to the viewer.
         final Component text = format.actionbar(
                 snap.entity(),
                 snap.health(),
@@ -42,12 +45,32 @@ public final class ActionBarChannel {
                 snap.damageAmount(),
                 snap.critical()
         );
+        final int duration = cfg.actionbarDurationTicks();
+        final int gen = this.lifetime.get();
+        Schedulers.entity(plugin, viewer, () -> {
+            if (this.lifetime.get() != gen) {
+                return;
+            }
+            show(viewer, text, fromDamage, duration);
+        });
+    }
+
+    private void show(
+            final Player viewer,
+            final Component text,
+            final boolean fromDamage,
+            final int duration
+    ) {
+        if (!ViewAccess.canSee(plugin, viewer)) {
+            return;
+        }
         viewer.sendActionBar(text);
 
         final UUID id = viewer.getUniqueId();
+        this.lastFromDamage.put(id, fromDamage);
         final AtomicInteger gen = this.generations.computeIfAbsent(id, u -> new AtomicInteger());
         final int token = gen.incrementAndGet();
-        Schedulers.globalDelayed(plugin, cfg.actionbarDurationTicks(), () -> {
+        Schedulers.globalDelayed(plugin, duration, () -> {
             if (gen.get() != token) {
                 return;
             }
@@ -56,10 +79,19 @@ public final class ActionBarChannel {
                 online.sendActionBar(Component.empty());
             }
             this.generations.remove(id, gen);
+            this.lastFromDamage.remove(id, fromDamage);
         });
     }
 
+    public void hideIfLookAt(final UUID playerId) {
+        if (!Boolean.FALSE.equals(this.lastFromDamage.get(playerId))) {
+            return;
+        }
+        removePlayer(playerId);
+    }
+
     public void removePlayer(final UUID playerId) {
+        this.lastFromDamage.remove(playerId);
         final AtomicInteger gen = this.generations.remove(playerId);
         if (gen != null) {
             gen.incrementAndGet();
@@ -71,9 +103,11 @@ public final class ActionBarChannel {
     }
 
     public void shutdown() {
+        this.lifetime.incrementAndGet();
         for (final UUID id : this.generations.keySet().toArray(UUID[]::new)) {
             removePlayer(id);
         }
         this.generations.clear();
+        this.lastFromDamage.clear();
     }
 }

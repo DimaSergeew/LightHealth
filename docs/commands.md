@@ -5,7 +5,7 @@
 | Command | Permission | Description |
 |---------|------------|-------------|
 | `/lh` · `/lighthealth` · `/mhp` | — | Help |
-| `/lh toggle` | `lighthealth.toggle` | Personal feedback on/off (actionbar, bossbar, look-at; your hits skip holograms & damage numbers) |
+| `/lh toggle` | `lighthealth.toggle` | Personal feedback on/off (saved across quit; actionbar, bossbar, look-at; your hits skip holograms & damage numbers) |
 | `/lh reload` | `lighthealth.admin` | Reload config + messages |
 | `/lh lang <code>` | `lighthealth.admin` | Set language |
 

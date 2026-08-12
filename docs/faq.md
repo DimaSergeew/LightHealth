@@ -3,7 +3,7 @@
 ## Style / look-at changes do nothing
 
 Reload config: `/lh reload`.  
-If the data folder has an **old** `config.yml` without new keys, delete it once (or merge keys) and restart.
+On startup / reload, missing keys from newer versions are merged into `config.yml` without overwriting your values.
 
 ## Boss bar / action bar never show
 
@@ -21,7 +21,7 @@ And that you did not run `/lh toggle` off, and have `lighthealth.see`.
 
 ## `/lh toggle` still shows holograms from other players
 
-Toggle is **per player**. It turns off:
+Toggle is **per player** and is saved in `player-toggles.yml` (survives quit and restart). It turns off:
 
 - your actionbar / bossbar / look-at
 - holograms and damage numbers **spawned by your hits**
@@ -41,7 +41,9 @@ Holograms ride the mob (no per-tick teleport). Raise `damage-numbers` view-dista
 
 ## Which servers are supported?
 
-**Spigot, Paper, Purpur, and Folia** (1.21+). No hard dependencies.
+**Paper, Purpur, and Folia** (1.21+ / Paper 26.x). No hard dependencies.
+
+This is a Paper plugin (`paper-plugin.yml`, Brigadier, Folia schedulers). It will **not** load on CraftBukkit / Spigot.
 
 ## Folia
 

@@ -16,9 +16,11 @@ hologram:
   only-when-damaged: true
   hide-after-ticks: 40
   view-distance: 16
+  # Extra height above the mob. Mounted holograms sit on the attachment point;
+  # rideable mobs / players use world-space follow instead (same offset above the head).
   y-offset: 0.35
 
-# Show HP while looking at a mob (raycast)
+# Show HP while looking at a mob (raycast, blocked by solid blocks)
 look-at:
   enabled: true
   range: 12
@@ -35,6 +37,8 @@ damage-numbers:
   view-distance: 16
   base-scale: 1.15
   crit-scale: 1.5
+  # Min ticks between environmental (fire/poison/cactus) numbers. 0 = off. Player hits always show.
+  env-interval-ticks: 10
   tiers:
     - max: 2
       format: "<#B0B0B0>-<amount></#B0B0B0>"
@@ -69,11 +73,14 @@ bossbar:
 
 # Used when style: custom (and as fallback)
 # Placeholders: <health> <max> <percent> <amount> <name> <hearts> <bar> <symbol>
+# look-at-* templates are used when damage is 0 (no -<amount>)
 format:
   hologram: "<bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
   damage: "<#FF5252>-<amount></#FF5252>"
   actionbar: "<white><name></white> <bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray> <red>-<amount></red>"
   bossbar: "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>  <red>-<amount></red>"
+  look-at-actionbar: "<white><name></white> <bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
+  look-at-bossbar: "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
 
 styles:
   hearts:
@@ -84,6 +91,8 @@ styles:
     hologram: "<hearts> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
     actionbar: "<white><name></white> <hearts> <white><health></white><dark_gray>/</dark_gray><gray><max></gray> <red>-<amount></red>"
     bossbar: "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>  <red>-<amount></red>"
+    look-at-actionbar: "<white><name></white> <hearts> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
+    look-at-bossbar: "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
   bar:
     filled: "█"
     empty: "░"
@@ -91,10 +100,14 @@ styles:
     hologram: "<bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
     actionbar: "<white><name></white> <bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray> <red>-<amount></red>"
     bossbar: "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>  <red>-<amount></red>"
+    look-at-actionbar: "<white><name></white> <bar> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
+    look-at-bossbar: "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
   numeric:
     hologram: "<red>❤</red> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
     actionbar: "<white><name></white> <red>❤</red> <white><health></white><dark_gray>/</dark_gray><gray><max></gray> <red>-<amount></red>"
     bossbar: "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>  <red>-<amount></red>"
+    look-at-actionbar: "<white><name></white> <red>❤</red> <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
+    look-at-bossbar: "<white><name></white>  <white><health></white><dark_gray>/</dark_gray><gray><max></gray>"
 
 blacklist:
   entities:

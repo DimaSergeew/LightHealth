@@ -5,7 +5,7 @@
 <h1 align="center">LightHealth</h1>
 
 <p align="center">
-  <strong>Modern mob health feedback for Spigot / Paper / Folia</strong><br>
+  <strong>Modern mob health feedback for Paper / Purpur / Folia</strong><br>
   Hologram · damage numbers · actionbar · bossbar · look-at
 </p>
 
@@ -34,7 +34,7 @@
 </p>
 
 **One job.** Show mob HP and damage — nothing else.  
-Zero hard dependencies · **Spigot / Paper / Purpur / Folia** · locales `en` `ru` `es` `zh`
+Zero hard dependencies · **Paper / Purpur / Folia** · locales `en` `ru` `es` `zh`
 
 | Channel | What you get |
 |---------|----------------|
@@ -79,10 +79,10 @@ Full reference → **[Wiki](https://dimasergeew.github.io/LightHealth/)**
 
 ```bash
 ./gradlew build
-# → build/libs/LightHealth-1.0.0.jar
+# → build/libs/LightHealth-1.0.2.jar
 ```
 
-**Requires** Java **25+** · **Spigot / Paper / Purpur / Folia** **1.21+** (Paper **26.x** supported)
+**Requires** Java **25+** · **Paper / Purpur / Folia** **1.21+** (Paper **26.x** supported). Not a Spigot plugin (Paper API).
 
 ## License
 

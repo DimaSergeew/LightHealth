@@ -1,31 +1,32 @@
 # SpigotMC resource text (copy-paste)
 
-Use this on the Spigot resource overview / overview edit so staff and users clearly see Spigot support.
+The plugin is listed on SpigotMC for discovery, but it is a **Paper** plugin.
 
 ## Short tagline
 
 ```text
-Modern mob HP feedback for Spigot, Paper, Purpur & Folia — hologram, damage numbers, actionbar, bossbar, look-at.
+Modern mob HP feedback for Paper, Purpur & Folia — hologram, damage numbers, actionbar, bossbar, look-at.
 ```
 
 ## Overview (BBCode)
 
 ```bbcode
 [CENTER][SIZE=5][B]LightHealth[/B][/SIZE]
-Modern mob health feedback for [B]Spigot / Paper / Purpur / Folia[/B]
+Modern mob health feedback for [B]Paper / Purpur / Folia[/B]
 Hologram · damage numbers · actionbar · bossbar · look-at[/CENTER]
 
 [B]Supported servers[/B]
 [LIST]
-[*][B]Spigot[/B]
 [*][B]Paper[/B]
 [*][B]Purpur[/B]
 [*][B]Folia[/B]
 [/LIST]
 
+[COLOR=RED]Requires Paper (or a Paper fork). Does not load on CraftBukkit / Spigot.[/COLOR]
+
 [B]Requirements[/B]
 [LIST]
-[*]Minecraft / Spigot API [B]1.21+[/B]
+[*]Paper [B]1.21+[/B] / Paper [B]26.x[/B]
 [*]Java [B]25+[/B]
 [*][B]No[/B] hard dependencies
 [/LIST]
@@ -35,7 +36,7 @@ Hologram · damage numbers · actionbar · bossbar · look-at[/CENTER]
 [*]Hologram HP bar (TextDisplay — does not rewrite mob names)
 [*]Colored damage numbers + crit style
 [*]Action bar & boss bar (green → yellow → red)
-[*]Look-at mode while aiming at a mob
+[*]Look-at mode while aiming at a mob (blocked by walls)
 [*]Styles: bar / hearts / numeric / custom
 [*]Locales: en · ru · es · zh
 [/LIST]

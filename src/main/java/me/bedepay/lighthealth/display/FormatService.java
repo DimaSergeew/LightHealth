@@ -41,7 +41,8 @@ public final class FormatService {
             final double amount,
             final boolean critical
     ) {
-        return render(config.formatActionbar(), entity, health, max, amount, critical);
+        final String template = amount > 0.0 ? config.formatActionbar() : config.formatLookAtActionbar();
+        return render(template, entity, health, max, amount, critical);
     }
 
     public Component bossbar(
@@ -51,7 +52,8 @@ public final class FormatService {
             final double amount,
             final boolean critical
     ) {
-        return render(config.formatBossbar(), entity, health, max, amount, critical);
+        final String template = amount > 0.0 ? config.formatBossbar() : config.formatLookAtBossbar();
+        return render(template, entity, health, max, amount, critical);
     }
 
     public BossBar.Color bossBarColor(final double health, final double max) {
@@ -82,7 +84,7 @@ public final class FormatService {
         final String hearts = buildHearts(clampedHealth, clampedMax, color);
         final String bar = buildBar(clampedHealth, clampedMax, color);
         final String symbol = critical ? config.critSymbol() : "";
-        final String amountText = amount > 0.0 ? formatNum(amount) : "0";
+        final String amountText = amount > 0.0 ? formatNum(amount) : "";
 
         final TagResolver resolvers = TagResolver.resolver(
                 Placeholder.unparsed("health", formatNum(clampedHealth)),

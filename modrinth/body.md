@@ -2,11 +2,11 @@
 
 ![banner](https://raw.githubusercontent.com/DimaSergeew/LightHealth/main/assets/banner.png)
 
-Modern, lightweight **mob health feedback** for **Spigot / Paper / Purpur / Folia**.
+Modern, lightweight **mob health feedback** for **Paper / Purpur / Folia**.
 
 **One job:** show HP and damage — hologram, floating numbers, actionbar, or bossbar.
 
-No hard dependencies. Clean config. Spigot-compatible · Folia-ready.
+No hard dependencies. Clean config. Folia-ready. Paper API (will not load on Spigot).
 
 ## Features
 
@@ -21,7 +21,7 @@ No hard dependencies. Clean config. Spigot-compatible · Folia-ready.
 
 ## Requirements
 
-- **Spigot / Paper / Purpur / Folia** 1.21+ (modern Paper 26.x supported)
+- **Paper / Purpur / Folia** 1.21+ (modern Paper 26.x supported)
 - **Java 25+**
 - **No** hard dependencies
 
