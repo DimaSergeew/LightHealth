@@ -29,15 +29,15 @@
 
 ---
 
-LightHealth is a small Paper plugin with a single purpose: when you hit a mob — or look at one — you see its health and the damage you dealt.
+LightHealth is a small Paper plugin with one job: when you hit a mob — or look at one — you see its health and the damage you dealt.
 
-It does not rewrite mob names, add extra gameplay, or pull in other plugins. Styles and languages are configured in YAML.
+It does **not** rewrite mob names, add extra gameplay, or require other plugins. Styles and languages live in YAML.
 
 Works on **Paper**, **Purpur**, and **Folia** (1.21+ / Paper 26.x). Locales: English, Russian, Spanish, Chinese.
 
 | Channel | What you see |
 |---------|----------------|
-| **Hologram** | A health bar above the mob, rendered as a `TextDisplay` |
+| **Hologram** | A health bar above the mob (`TextDisplay`) |
 | **Numbers** | Floating damage, colored by amount, with a distinct crit style |
 | **Action / boss bar** | Health and damage, shifting green → yellow → red |
 | **Look-at** | The same feedback while you aim at a mob, without dealing damage |
@@ -46,11 +46,20 @@ Works on **Paper**, **Purpur**, and **Folia** (1.21+ / Paper 26.x). Locales: Eng
   <img src="assets/gallery.png" alt="In-game preview: health bar and damage number above a wither skeleton" width="720">
 </p>
 
+## Features
+
+- **Four display channels** — hologram, damage numbers, action bar, boss bar (toggle each in config)
+- **Look-at** — raycast HP feedback without hitting; range and channels configurable
+- **Styles** — `bar`, `hearts`, `numeric`, or `custom` formats with MiniMessage placeholders
+- **Locales** — `en`, `ru`, `es`, `zh` out of the box (`/lh lang`)
+- **Folia-ready** — no soft-dependencies; Paper API only
+- **Per-player toggle** — `/lh toggle` persists across restarts
+
 ## Install
 
-1. Download `LightHealth-x.y.z.jar` from [Releases](https://github.com/DimaSergeew/LightHealth/releases/latest) and put it in `plugins/`.
-2. Restart the server, then hit a mob — or look at one.
-3. Optionally edit `plugins/LightHealth/config.yml` and run `/lh reload`.
+1. Download `LightHealth-x.y.z.jar` from [Releases](https://github.com/DimaSergeew/LightHealth/releases/latest) or [Modrinth](https://modrinth.com/plugin/lighthealth).
+2. Put the jar in `plugins/` and restart the server.
+3. Hit a mob — or look at one. Optionally edit `plugins/LightHealth/config.yml` and run `/lh reload`.
 
 ```yaml
 language: en
@@ -62,17 +71,28 @@ display:
   bossbar: true
 ```
 
+More options (look-at, hologram timing, damage-number tiers, custom formats): **[configuration docs](https://dimasergeew.github.io/LightHealth/config/)**.
+
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `/lh toggle` | Turn personal feedback on or off |
-| `/lh reload` | Reload the config (admin) |
-| `/lh lang <en\|ru\|es\|zh>` | Set the plugin language (admin) |
+Aliases: `/lh`, `/lighthealth`, `/mhp`.
 
-Aliases: `/lighthealth`, `/mhp`.
+| Command | Permission | Description |
+|---------|------------|-------------|
+| `/lh` | — | Show help |
+| `/lh toggle` | `lighthealth.toggle` | Turn personal feedback on or off |
+| `/lh reload` | `lighthealth.admin` | Reload config and messages |
+| `/lh lang <en\|ru\|es\|zh>` | `lighthealth.admin` | Set the plugin language |
 
-Full reference: **[documentation](https://dimasergeew.github.io/LightHealth/)**.
+Full reference: **[commands & permissions](https://dimasergeew.github.io/LightHealth/commands/)**.
+
+## Permissions
+
+| Permission | Default | Description |
+|------------|---------|-------------|
+| `lighthealth.see` | `true` | See health displays / spawn holograms and numbers from your hits |
+| `lighthealth.toggle` | `true` | Use `/lh toggle` |
+| `lighthealth.admin` | `op` | Reload and language |
 
 ## Requirements
 
