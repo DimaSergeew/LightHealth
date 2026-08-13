@@ -1,86 +1,72 @@
-# LightHealth
+<p style="text-align:center">
+  <img src="https://raw.githubusercontent.com/DimaSergeew/LightHealth/main/assets/banner.png" alt="LightHealth — mob health feedback">
+</p>
 
-![banner](https://raw.githubusercontent.com/DimaSergeew/LightHealth/main/assets/banner.png)
+<p style="text-align:center">
+  <strong>Show mob health and damage — clearly, and nothing else.</strong><br>
+  Holograms · floating numbers · action bar · boss bar · look-at
+</p>
 
-Modern, lightweight **mob health feedback** for **Paper / Purpur / Folia**.
+LightHealth is a small **Paper** plugin with one job: when you hit a mob — or look at one — you see its health and the damage you dealt.
 
-**One job:** show HP and damage — hologram, floating numbers, actionbar, or bossbar.
+It does **not** rewrite mob names, add extra gameplay, or need other plugins. Styles and languages live in YAML.
 
-No hard dependencies. Clean config. Folia-ready. Paper API (will not load on Spigot).
+Works on **Paper**, **Purpur**, and **Folia** (1.21+ / Paper 26.x). Languages: English, Russian, Spanish, Chinese.
 
-## Features
+| Channel | What you see |
+|---------|----------------|
+| **Hologram** | A health bar above the mob (`TextDisplay`) |
+| **Numbers** | Floating damage, colored by amount, with a distinct crit style |
+| **Action / boss bar** | Health and damage, shifting green → yellow → red |
+| **Look-at** | The same feedback while you aim, without dealing damage |
 
-- **Hologram** above mobs (TextDisplay — does not rewrite entity names)
-- **Damage numbers** with color tiers by damage amount
-- **Critical hits** — special symbol, gradient, larger scale
-- **Action bar** — bar + HP + damage dealt
-- **Boss bar** — progress = mob HP, color green → yellow → red
-- **Look-at** — show HP while looking at a mob
-- **Styles:** `bar` · `hearts` · `numeric` · `custom`
-- **Locales:** English, Russian, Spanish, Chinese (`en` / `ru` / `es` / `zh`)
-
-## Requirements
-
-- **Paper / Purpur / Folia** 1.21+ (modern Paper 26.x supported)
-- **Java 25+**
-- **No** hard dependencies
+<p style="text-align:center">
+  <img src="https://raw.githubusercontent.com/DimaSergeew/LightHealth/main/assets/gallery.png" alt="In-game preview: health bar and damage number above a wither skeleton">
+</p>
 
 ## Install
 
-1. Drop the jar into `plugins/`
-2. Start the server
-3. Edit `plugins/LightHealth/config.yml` if needed
-4. `/lh reload`
-
-## Commands
-
-| Command | Permission | Description |
-|---------|------------|-------------|
-| `/lh` · `/lighthealth` · `/mhp` | — | Help |
-| `/lh toggle` | `lighthealth.toggle` | Personal feedback on/off |
-| `/lh reload` | `lighthealth.admin` | Reload config + messages |
-| `/lh lang <code>` | `lighthealth.admin` | Language: `en` `ru` `es` `zh` |
-
-## Permissions
-
-| Permission | Default | Description |
-|------------|---------|-------------|
-| `lighthealth.see` | true | See displays |
-| `lighthealth.toggle` | true | `/lh toggle` |
-| `lighthealth.admin` | op | reload / lang |
-
-## Quick config
+1. Download the jar from this page
+2. Put it in `plugins/` and restart
+3. Hit a mob — or look at one
 
 ```yaml
 language: en
 style: bar
-
 display:
   hologram: true
   damage-numbers: true
   actionbar: true
   bossbar: true
-
-look-at:
-  enabled: true
-  range: 12
-  show:
-    hologram: true
-    actionbar: true
-    bossbar: false
 ```
 
-### Format placeholders
+Styles: `bar` · `hearts` · `numeric` · `custom`.  
+Full options: **[documentation](https://dimasergeew.github.io/LightHealth/)**.
 
-`<health>` `<max>` `<percent>` `<amount>` `<name>` `<hearts>` `<bar>` `<symbol>`
+## Commands
+
+Aliases: `/lh`, `/lighthealth`, `/mhp`
+
+| Command | Description |
+|---------|-------------|
+| `/lh toggle` | Personal feedback on or off |
+| `/lh reload` | Reload config (admin) |
+| `/lh lang en` / `ru` / `es` / `zh` | Plugin language (admin) |
+
+## Requirements
+
+| | |
+|--|--|
+| Server | Paper, Purpur, or Folia **1.21+** (Paper **26.x** included) |
+| Java | **25+** |
+| Dependencies | None |
+
+This is a Paper plugin. It will **not** load on CraftBukkit or Spigot.
 
 ## Links
 
-- [Documentation / Wiki](https://dimasergeew.github.io/LightHealth/)
-- [Source (GitHub)](https://github.com/DimaSergeew/LightHealth)
+- [Documentation](https://dimasergeew.github.io/LightHealth/)
+- [GitHub](https://github.com/DimaSergeew/LightHealth)
 - [SpigotMC](https://www.spigotmc.org/resources/lighthealth.137519/)
-- [Releases](https://github.com/DimaSergeew/LightHealth/releases)
 
-## License
-
-MIT
+MIT · no dependencies

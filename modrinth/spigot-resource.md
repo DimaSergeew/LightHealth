@@ -5,49 +5,54 @@ Listed on SpigotMC for discovery. Built for the Paper family.
 ## Short description (line under the resource title)
 
 ```text
-Show mob health and damage — hologram, numbers, action bar, boss bar, and look-at. No other plugins required.
+Show mob health and damage — hologram, numbers, action bar, boss bar, look-at. Paper / Purpur / Folia.
 ```
 
-## Overview (BBCode, no images)
+## Overview (BBCode)
 
 Paste this into the **Overview** / Resource Description field in BBCode mode.
 
 ```bbcode
-[CENTER][SIZE=6][B]LightHealth[/B][/SIZE]
-[SIZE=4]Mob health and damage — and nothing else[/SIZE]
-[/CENTER]
+[CENTER][IMG]https://raw.githubusercontent.com/DimaSergeew/LightHealth/main/assets/banner.png[/IMG][/CENTER]
 
-LightHealth does one job, quietly: when you hit a mob, or simply look at one, you see its [B]health[/B] and the [B]damage you dealt[/B].
+[CENTER][SIZE=5][B]LightHealth[/B][/SIZE]
+[SIZE=4]Show mob health and damage — clearly, and nothing else[/SIZE]
+Holograms · floating numbers · action bar · boss bar · look-at[/CENTER]
 
-It does not rewrite mob names. It needs no other plugins. Styles and languages live in YAML.
+LightHealth is a small [B]Paper[/B] plugin with one job: when you hit a mob — or look at one — you see its [B]health[/B] and the [B]damage you dealt[/B].
+
+It does not rewrite mob names, add extra gameplay, or need other plugins. Styles and languages live in YAML.
+
+[CENTER][IMG]https://raw.githubusercontent.com/DimaSergeew/LightHealth/main/assets/gallery.png[/IMG][/CENTER]
 
 [SIZE=4][B]What you see[/B][/SIZE]
 [LIST]
-[*][B]Hologram[/B] — a health bar above the mob (TextDisplay, names stay untouched)
+[*][B]Hologram[/B] — a health bar above the mob ([FONT=courier new]TextDisplay[/FONT], names stay untouched)
 [*][B]Damage numbers[/B] — colored by how hard you hit, with a distinct crit style
 [*][B]Action bar & boss bar[/B] — health and damage, shifting green → yellow → red
 [*][B]Look-at[/B] — the same feedback while you aim at a mob, no hit required
-[*][B]Styles[/B] — bar, hearts, numeric, or your own template
+[*][B]Styles[/B] — bar, hearts, numeric, or your own MiniMessage template
 [*][B]Languages[/B] — English, Russian, Spanish, Chinese
 [/LIST]
 
 [SIZE=4][B]Requirements[/B][/SIZE]
 [LIST]
-[*]Minecraft [B]1.21+[/B] (including 26.x)
+[*][B]Paper / Purpur / Folia[/B] 1.21+ (Paper 26.x included)
 [*]Java [B]25+[/B]
 [*][B]No[/B] other plugins
 [/LIST]
+[COLOR=#C0392B]This is a Paper plugin. It will not load on CraftBukkit or Spigot.[/COLOR]
 
 [SIZE=4][B]Install[/B][/SIZE]
 [LIST=1]
-[*]Drop the jar into [B]plugins/[/B] and restart the server
+[*]Drop the jar into [B]plugins/[/B] and restart
 [*]Hit a mob — or look at one
 [*]Optionally edit [B]plugins/LightHealth/config.yml[/B] and run [B]/lh reload[/B]
 [/LIST]
 
 [SIZE=4][B]Commands[/B][/SIZE]
 [LIST]
-[*][B]/lh toggle[/B] — turn personal feedback on or off
+[*][B]/lh toggle[/B] — personal feedback on or off
 [*][B]/lh reload[/B] — reload the config (admin)
 [*][B]/lh lang en|ru|es|zh[/B] — plugin language (admin)
 [/LIST]

@@ -8,7 +8,7 @@
   Scopes: project:create, project:write, version:create, version:write (PAT with full project access).
 #>
 param(
-    [string]$Version = "1.0.1",
+    [string]$Version = "1.0.3",
     [string]$Jar = "",
     [string]$Slug = "lighthealth",
     [switch]$Draft
@@ -69,8 +69,8 @@ try {
     $projectData = @{
         slug            = $Slug
         title           = "LightHealth"
-        description     = "Modern mob health feedback for Spigot / Paper / Purpur / Folia: hologram, damage numbers, actionbar, bossbar, look-at."
-        categories      = @("management", "utility")
+        description     = "Show mob health and damage — hologram, numbers, action bar, boss bar, look-at. Paper / Purpur / Folia."
+        categories      = @("utility", "game-mechanics")
         client_side     = "unsupported"
         server_side     = "required"
         body            = $body
@@ -131,8 +131,8 @@ $projectId = $project.id
 try {
     Invoke-Mr -Method PATCH -Url "$api/project/$projectId" -Hdr $headers -Body @{
         body        = $body
-        description = "Modern mob health feedback for Spigot / Paper / Purpur / Folia: hologram, damage numbers, actionbar, bossbar, look-at."
-        categories  = @("management", "utility")
+        description = "Show mob health and damage — hologram, numbers, action bar, boss bar, look-at. Paper / Purpur / Folia."
+        categories  = @("utility", "game-mechanics")
         issues_url  = "https://github.com/DimaSergeew/LightHealth/issues"
         source_url  = "https://github.com/DimaSergeew/LightHealth"
         wiki_url    = "https://dimasergeew.github.io/LightHealth/"
@@ -146,19 +146,22 @@ try {
 $changelog = @"
 ## $Version
 
-Bugfix and reliability release for Paper / Folia.
+Bugfix release for **Paper / Purpur / Folia**.
 
 ### Fixes
-- Folia: floating damage numbers no longer leave orphan TextDisplays on victim death
-- hologram.only-when-damaged only affects holograms (not numbers/bars)
-- /lh toggle + lighthealth.see unified (personal bars; holograms/numbers from your hits)
-- Quit cleans prefs, actionbar generations, bossbars
+- Look-at no longer replaces the hit action bar / boss bar ``-<amount>``
+- Looking away no longer hides the hologram for other players still aiming at that mob
+- Holograms and damage numbers are no longer readable through walls
+- ``/lh toggle`` and ``lighthealth.see`` now hide TextDisplays from that observer
+- Folia: look-at reads player state on the player thread; displays are removed on their own scheduler
+- Mob names use the client translation; players show their actual name
+- Pet / TNT / lingering potion / lightning owners are treated as the viewer
 
 ### Improvements
-- Holograms ride the mob (no per-tick teleport follow)
-- Single raycast for look-at; cached Folia detection
-- Locale files soft-merge new keys
-- Removed empty bootstrapper
+- Look-at hide timers no longer reschedule every scan tick
+- Spectator / lost permission clears look-at immediately
+- ``player-toggles.yml`` saves under a lock
+- ``/lh lang esoteric`` is no longer accepted as Spanish
 
 GitHub: https://github.com/DimaSergeew/LightHealth/releases/tag/v$Version
 "@
