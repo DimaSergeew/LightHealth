@@ -91,7 +91,7 @@ public final class FormatService {
                 Placeholder.unparsed("max", formatNum(clampedMax)),
                 Placeholder.unparsed("percent", Integer.toString(percent)),
                 Placeholder.unparsed("amount", amountText),
-                Placeholder.unparsed("name", entityName(entity)),
+                Placeholder.component("name", entity.name()),
                 Placeholder.unparsed("symbol", symbol),
                 Placeholder.parsed("hearts", hearts),
                 Placeholder.parsed("bar", bar)
@@ -169,17 +169,5 @@ public final class FormatService {
             return Integer.toString((int) Math.rint(value));
         }
         return String.format(Locale.US, "%.1f", value);
-    }
-
-    private static String entityName(final LivingEntity entity) {
-        if (entity.customName() != null) {
-            return net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText()
-                    .serialize(entity.customName());
-        }
-        final String key = entity.getType().getKey().getKey().replace('_', ' ');
-        if (key.isEmpty()) {
-            return entity.getType().name();
-        }
-        return Character.toUpperCase(key.charAt(0)) + key.substring(1);
     }
 }

@@ -2,8 +2,8 @@
 prefix: "<gradient:#FF6B6B:#FFA07A><bold>LightHealth</bold></gradient> <dark_gray>»</dark_gray> "
 
 reloaded: "<green>Конфиг и сообщения перезагружены."
-toggled-on: "<green>Ваш HP-фидбек <white>включён</white> (actionbar, bossbar, голограммы и цифры с ваших ударов)."
-toggled-off: "<gray>Ваш HP-фидбек <white>выключен</white> (личные панели off; ваши удары не спавнят голограммы/цифры)."
+toggled-on: "<green>Ваш HP-фидбек <white>включён</white> (actionbar, bossbar, голограммы и цифры)."
+toggled-off: "<gray>Ваш HP-фидбек <white>выключен</white> (вы не видите панели, голограммы и цифры)."
 players-only: "<red>Только для игроков."
 no-permission: "<red>Нет прав."
 unknown-language: "<red>Неизвестный язык. Доступно: <white>en</white>, <white>ru</white>, <white>es</white>, <white>zh</white>."

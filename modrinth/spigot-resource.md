@@ -1,60 +1,64 @@
 # SpigotMC resource text (copy-paste)
 
-The plugin is listed on SpigotMC for discovery, but it is a **Paper** plugin.
+Listed on SpigotMC for discovery. Built for the Paper family.
 
-## Short tagline
+## Short description (line under the resource title)
 
 ```text
-Modern mob HP feedback for Paper, Purpur & Folia — hologram, damage numbers, actionbar, bossbar, look-at.
+Show mob health and damage — hologram, numbers, action bar, boss bar, and look-at. No other plugins required.
 ```
 
-## Overview (BBCode)
+## Overview (BBCode, no images)
+
+Paste this into the **Overview** / Resource Description field in BBCode mode.
 
 ```bbcode
-[CENTER][SIZE=5][B]LightHealth[/B][/SIZE]
-Modern mob health feedback for [B]Paper / Purpur / Folia[/B]
-Hologram · damage numbers · actionbar · bossbar · look-at[/CENTER]
+[CENTER][SIZE=6][B]LightHealth[/B][/SIZE]
+[SIZE=4]Mob health and damage — and nothing else[/SIZE]
+[/CENTER]
 
-[B]Supported servers[/B]
+LightHealth does one job, quietly: when you hit a mob, or simply look at one, you see its [B]health[/B] and the [B]damage you dealt[/B].
+
+It does not rewrite mob names. It needs no other plugins. Styles and languages live in YAML.
+
+[SIZE=4][B]What you see[/B][/SIZE]
 [LIST]
-[*][B]Paper[/B]
-[*][B]Purpur[/B]
-[*][B]Folia[/B]
+[*][B]Hologram[/B] — a health bar above the mob (TextDisplay, names stay untouched)
+[*][B]Damage numbers[/B] — colored by how hard you hit, with a distinct crit style
+[*][B]Action bar & boss bar[/B] — health and damage, shifting green → yellow → red
+[*][B]Look-at[/B] — the same feedback while you aim at a mob, no hit required
+[*][B]Styles[/B] — bar, hearts, numeric, or your own template
+[*][B]Languages[/B] — English, Russian, Spanish, Chinese
 [/LIST]
 
-[COLOR=RED]Requires Paper (or a Paper fork). Does not load on CraftBukkit / Spigot.[/COLOR]
-
-[B]Requirements[/B]
+[SIZE=4][B]Requirements[/B][/SIZE]
 [LIST]
-[*]Paper [B]1.21+[/B] / Paper [B]26.x[/B]
+[*]Minecraft [B]1.21+[/B] (including 26.x)
 [*]Java [B]25+[/B]
-[*][B]No[/B] hard dependencies
+[*][B]No[/B] other plugins
 [/LIST]
 
-[B]Features[/B]
+[SIZE=4][B]Install[/B][/SIZE]
+[LIST=1]
+[*]Drop the jar into [B]plugins/[/B] and restart the server
+[*]Hit a mob — or look at one
+[*]Optionally edit [B]plugins/LightHealth/config.yml[/B] and run [B]/lh reload[/B]
+[/LIST]
+
+[SIZE=4][B]Commands[/B][/SIZE]
 [LIST]
-[*]Hologram HP bar (TextDisplay — does not rewrite mob names)
-[*]Colored damage numbers + crit style
-[*]Action bar & boss bar (green → yellow → red)
-[*]Look-at mode while aiming at a mob (blocked by walls)
-[*]Styles: bar / hearts / numeric / custom
-[*]Locales: en · ru · es · zh
+[*][B]/lh toggle[/B] — turn personal feedback on or off
+[*][B]/lh reload[/B] — reload the config (admin)
+[*][B]/lh lang en|ru|es|zh[/B] — plugin language (admin)
 [/LIST]
+Aliases: [B]/lighthealth[/B], [B]/mhp[/B]
 
-[B]Commands[/B]
-[LIST]
-[*][B]/lh toggle[/B] — personal feedback on/off
-[*][B]/lh reload[/B] — reload config (admin)
-[*][B]/lh lang <code>[/B] — language (admin)
-[/LIST]
-Aliases: [B]/lighthealth[/B] · [B]/mhp[/B]
-
-[B]Links[/B]
+[SIZE=4][B]Links[/B][/SIZE]
 [LIST]
 [*]Docs: [URL]https://dimasergeew.github.io/LightHealth/[/URL]
-[*]Modrinth: [URL]https://modrinth.com/plugin/lighthealth[/URL]
 [*]GitHub: [URL]https://github.com/DimaSergeew/LightHealth[/URL]
+[*]Modrinth: [URL]https://modrinth.com/plugin/lighthealth[/URL]
 [/LIST]
 
-[I]Free · MIT · zero hard deps[/I]
+[I]Free · MIT · no dependencies[/I]
 ```

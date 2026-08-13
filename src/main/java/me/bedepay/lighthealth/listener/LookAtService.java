@@ -56,18 +56,14 @@ public final class LookAtService {
             return;
         }
         for (final Player player : Bukkit.getOnlinePlayers()) {
-            if (!player.isOnline() || player.getGameMode() == GameMode.SPECTATOR) {
-                continue;
-            }
-            if (!ViewAccess.canSee(plugin, player)) {
-                continue;
-            }
             Schedulers.entity(plugin, player, () -> checkPlayer(player, settings));
         }
     }
 
     private void checkPlayer(final Player player, final LookAtSettings settings) {
-        if (!player.isOnline() || !ViewAccess.canSee(plugin, player)) {
+        if (!player.isOnline()
+                || player.getGameMode() == GameMode.SPECTATOR
+                || !ViewAccess.canSee(plugin, player)) {
             clearPlayer(player.getUniqueId());
             return;
         }
@@ -87,7 +83,7 @@ public final class LookAtService {
         }
         this.lastTarget.put(playerId, targetId);
         Schedulers.entity(plugin, target, () -> {
-            if (!target.isValid() || !player.isOnline() || !ViewAccess.canSee(plugin, player)) {
+            if (!target.isValid()) {
                 return;
             }
             plugin.displays().onLookAt(target, player, settings);

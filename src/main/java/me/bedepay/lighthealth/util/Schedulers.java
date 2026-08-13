@@ -45,6 +45,17 @@ public final class Schedulers {
         Bukkit.getScheduler().runTask(plugin, task);
     }
 
+    public static void removeEntity(final Plugin plugin, final Entity entity) {
+        if (entity == null) {
+            return;
+        }
+        entity(plugin, entity, () -> {
+            if (entity.isValid()) {
+                entity.remove();
+            }
+        });
+    }
+
     public static void entityDelayed(
             final Plugin plugin,
             final Entity entity,

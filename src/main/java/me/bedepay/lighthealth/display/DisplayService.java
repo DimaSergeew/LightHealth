@@ -95,7 +95,7 @@ public final class DisplayService {
     }
 
     public void hideLookAt(final UUID playerId, final UUID entityId) {
-        this.hologram.hideIfLookAt(entityId);
+        this.hologram.hideIfLookAt(playerId, entityId);
         this.actionbar.hideIfLookAt(playerId);
         this.bossbar.hideIfLookAt(playerId);
     }
@@ -131,6 +131,8 @@ public final class DisplayService {
     public void clearPersonal(final UUID playerId) {
         this.bossbar.removePlayer(playerId);
         this.actionbar.removePlayer(playerId);
+        this.hologram.concealPlayer(playerId);
+        this.damageNumbers.concealPlayer(playerId);
     }
 
     public void shutdown() {

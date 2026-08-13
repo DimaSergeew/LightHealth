@@ -18,6 +18,7 @@ public final class PlayerPrefs {
     private final JavaPlugin plugin;
     private final File file;
     private final Set<UUID> disabled = ConcurrentHashMap.newKeySet();
+    private final Object io = new Object();
 
     public PlayerPrefs(final JavaPlugin plugin) {
         this.plugin = plugin;
@@ -30,44 +31,52 @@ public final class PlayerPrefs {
     }
 
     public boolean toggle(final UUID uuid) {
-        final boolean enabled;
-        if (this.disabled.remove(uuid)) {
-            enabled = true;
-        } else {
-            this.disabled.add(uuid);
-            enabled = false;
+        synchronized (this.io) {
+            final boolean enabled;
+            if (this.disabled.remove(uuid)) {
+                enabled = true;
+            } else {
+                this.disabled.add(uuid);
+                enabled = false;
+            }
+            saveLocked();
+            return enabled;
         }
-        save();
-        return enabled;
     }
 
     public void clearPlayer(final UUID uuid) {
-        if (this.disabled.remove(uuid)) {
-            save();
-        }
-    }
-
-    public void clear() {
-        this.disabled.clear();
-        save();
-    }
-
-    private void load() {
-        this.disabled.clear();
-        if (!this.file.isFile()) {
-            return;
-        }
-        final YamlConfiguration yaml = YamlConfiguration.loadConfiguration(this.file);
-        for (final String raw : yaml.getStringList("disabled")) {
-            try {
-                this.disabled.add(UUID.fromString(raw));
-            } catch (final IllegalArgumentException ignored) {
-                this.plugin.getLogger().warning("Ignoring invalid toggle UUID: " + raw);
+        synchronized (this.io) {
+            if (this.disabled.remove(uuid)) {
+                saveLocked();
             }
         }
     }
 
-    private void save() {
+    public void clear() {
+        synchronized (this.io) {
+            this.disabled.clear();
+            saveLocked();
+        }
+    }
+
+    private void load() {
+        synchronized (this.io) {
+            this.disabled.clear();
+            if (!this.file.isFile()) {
+                return;
+            }
+            final YamlConfiguration yaml = YamlConfiguration.loadConfiguration(this.file);
+            for (final String raw : yaml.getStringList("disabled")) {
+                try {
+                    this.disabled.add(UUID.fromString(raw));
+                } catch (final IllegalArgumentException ignored) {
+                    this.plugin.getLogger().warning("Ignoring invalid toggle UUID: " + raw);
+                }
+            }
+        }
+    }
+
+    private void saveLocked() {
         final YamlConfiguration yaml = new YamlConfiguration();
         final List<String> ids = new ArrayList<>(this.disabled.size());
         for (final UUID id : this.disabled) {

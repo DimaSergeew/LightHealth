@@ -2,15 +2,17 @@ package me.bedepay.lighthealth.display;
 
 import me.bedepay.lighthealth.LightHealth;
 import me.bedepay.lighthealth.config.PluginConfig;
+import me.bedepay.lighthealth.util.DisplayViewers;
 import me.bedepay.lighthealth.util.Schedulers;
-import me.bedepay.lighthealth.util.ViewAccess;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.util.Transformation;
+import org.jspecify.annotations.Nullable;
 import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
 
@@ -36,11 +38,6 @@ public final class DamageNumberChannel {
     public void handle(final HealthSnapshot snap, final FormatService format) {
         final PluginConfig cfg = plugin.config();
         if (!cfg.damageNumbers() || snap.damageAmount() <= 0.0) {
-            return;
-        }
-        // When a player dealt the hit, respect their toggle / permission.
-        // Environmental damage (no viewer) still shows for everyone nearby.
-        if (snap.viewer() != null && !ViewAccess.canSee(plugin, snap.viewer())) {
             return;
         }
         final LivingEntity entity = snap.entity();
@@ -74,7 +71,7 @@ public final class DamageNumberChannel {
             if (this.lifetime.get() != gen) {
                 return;
             }
-            spawn(entity, victimId, text, cfg, scale, rise, duration);
+            spawn(entity, victimId, text, cfg, scale, rise, duration, snap.viewer());
         });
     }
 
@@ -85,9 +82,14 @@ public final class DamageNumberChannel {
             final PluginConfig cfg,
             final float scale,
             final double rise,
-            final int duration
+            final int duration,
+            final @Nullable Player viewer
     ) {
         if (!entity.isValid()) {
+            return;
+        }
+        if (viewer == null
+                && entity.getWorld().getNearbyPlayers(entity.getLocation(), cfg.damageViewDistance()).isEmpty()) {
             return;
         }
         final ThreadLocalRandom rng = ThreadLocalRandom.current();
@@ -98,7 +100,7 @@ public final class DamageNumberChannel {
         final TextDisplay display = entity.getWorld().spawn(start, TextDisplay.class, d -> {
             d.text(text);
             d.setBillboard(Display.Billboard.CENTER);
-            d.setSeeThrough(true);
+            DisplayViewers.prepare(d);
             d.setShadowed(true);
             d.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
             d.setDefaultBackground(false);
@@ -131,6 +133,16 @@ public final class DamageNumberChannel {
         this.byVictim
                 .computeIfAbsent(victimId, id -> ConcurrentHashMap.newKeySet())
                 .add(active);
+        DisplayViewers.show(plugin, display, viewer);
+        DisplayViewers.showNearby(plugin, display, start, cfg.damageViewDistance());
+    }
+
+    public void concealPlayer(final UUID playerId) {
+        for (final Set<ActiveNumber> set : this.byVictim.values()) {
+            for (final ActiveNumber n : set) {
+                DisplayViewers.hide(plugin, n.display, playerId);
+            }
+        }
     }
 
     public void removeVictim(final UUID victimId) {
@@ -147,9 +159,7 @@ public final class DamageNumberChannel {
 
     private void destroyDisplay(final UUID victimId, final TextDisplay display, final Object task) {
         Schedulers.cancel(task);
-        if (display.isValid()) {
-            display.remove();
-        }
+        Schedulers.removeEntity(plugin, display);
         final Set<ActiveNumber> set = this.byVictim.get(victimId);
         if (set == null) {
             return;
@@ -169,7 +179,7 @@ public final class DamageNumberChannel {
         this.lastEnvTick.clear();
     }
 
-    private static final class ActiveNumber {
+    private final class ActiveNumber {
         private final TextDisplay display;
         private final Object[] taskHolder;
 
@@ -180,9 +190,7 @@ public final class DamageNumberChannel {
 
         private void destroy() {
             Schedulers.cancel(taskHolder[0]);
-            if (display.isValid()) {
-                display.remove();
-            }
+            Schedulers.removeEntity(plugin, display);
         }
     }
 }

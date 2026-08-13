@@ -22,12 +22,11 @@
 
 ??? question "`/lh toggle` still shows holograms from other players"
 
-    Toggle is **per player** and is saved in `player-toggles.yml`. It turns off:
+    Toggle is **per observer** and is saved in `player-toggles.yml`. It turns off **your** action bar, boss bar, look-at, holograms, and damage numbers.
 
-    - your action bar, boss bar, and look-at
-    - holograms and damage numbers **spawned by your hits**
+    Holograms and floating numbers are `TextDisplay`s hidden by default. They are shown only to players who have toggle on and `lighthealth.see`. Other players' hits can still create a display, but you will not see it while toggled off.
 
-    If another player hits a mob, their hologram is a world `TextDisplay` and may still be visible. Fire, cactus, and other environmental damage can still spawn a hologram with no player viewer.
+    Fire, cactus, and other environmental damage can still spawn a display for nearby players who have feedback enabled.
 
 ??? question "Holograms lag on farms"
 
@@ -50,7 +49,7 @@
 
 ??? question "Does Folia work?"
 
-    Yes. Scheduling uses entity and global region schedulers. Floating damage numbers are cleaned up when the entity is removed, so they should not leave orphan `TextDisplay`s.
+    Yes. Entity work uses the entity scheduler; delayed action/boss bars run on the viewer's scheduler. `TextDisplay`s are removed on the display's own scheduler so they should not leak across regions.
 
 ??? question "Does it rewrite mob names?"
 

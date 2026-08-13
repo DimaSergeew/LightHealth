@@ -6,8 +6,7 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Shared gate for personal HP feedback (prefs + permission).
- * World-visible TextDisplays (hologram / damage numbers) also consult this
- * when a player viewer is known, so {@code /lh toggle} is consistent.
+ * TextDisplays are hidden by default and only shown to players who pass this check.
  */
 public final class ViewAccess {
 

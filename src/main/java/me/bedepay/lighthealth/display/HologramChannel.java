@@ -2,8 +2,8 @@ package me.bedepay.lighthealth.display;
 
 import me.bedepay.lighthealth.LightHealth;
 import me.bedepay.lighthealth.config.PluginConfig;
+import me.bedepay.lighthealth.util.DisplayViewers;
 import me.bedepay.lighthealth.util.Schedulers;
-import me.bedepay.lighthealth.util.ViewAccess;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -16,8 +16,10 @@ import org.bukkit.entity.Vehicle;
 import org.bukkit.util.Transformation;
 import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -41,11 +43,6 @@ public final class HologramChannel {
         if (fromDamage && !cfg.hologram()) {
             return;
         }
-        // Known player viewer must be allowed (toggle / permission).
-        // No viewer (e.g. fire damage) still spawns a world-visible hologram.
-        if (snap.viewer() != null && !ViewAccess.canSee(plugin, snap.viewer())) {
-            return;
-        }
         final LivingEntity entity = snap.entity();
         if (!entity.isValid()) {
             return;
@@ -53,11 +50,12 @@ public final class HologramChannel {
 
         final int gen = this.lifetime.get();
         final Component text = format.hologram(entity, snap.health(), snap.maxHealth(), snap.damageAmount());
+        final Player viewer = snap.viewer();
         Schedulers.entity(plugin, entity, () -> {
             if (this.lifetime.get() != gen) {
                 return;
             }
-            upsert(entity, text, cfg, fromDamage);
+            upsert(entity, text, cfg, fromDamage, viewer);
         });
     }
 
@@ -65,20 +63,24 @@ public final class HologramChannel {
             final LivingEntity entity,
             final Component text,
             final PluginConfig cfg,
-            final boolean fromDamage
+            final boolean fromDamage,
+            final @Nullable Player viewer
     ) {
         if (!entity.isValid()) {
             return;
         }
+        if (fromDamage
+                && viewer == null
+                && entity.getWorld().getNearbyPlayers(entity.getLocation(), cfg.hologramViewDistance()).isEmpty()) {
+            return;
+        }
+
         final UUID id = entity.getUniqueId();
         final ActiveHolo existing = this.active.get(id);
         if (existing != null && existing.display().isValid()) {
             existing.display().text(text);
             existing.refreshOffset(entity, cfg);
-            if (fromDamage) {
-                existing.markDamage();
-            }
-            existing.scheduleHide(plugin, entity, id, cfg.hologramHideTicks());
+            existing.share(entity, cfg, fromDamage, viewer);
             return;
         }
 
@@ -93,7 +95,7 @@ public final class HologramChannel {
         final TextDisplay display = entity.getWorld().spawn(base, TextDisplay.class, d -> {
             d.text(text);
             d.setBillboard(Display.Billboard.CENTER);
-            d.setSeeThrough(true);
+            DisplayViewers.prepare(d);
             d.setShadowed(true);
             d.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
             d.setDefaultBackground(false);
@@ -129,7 +131,7 @@ public final class HologramChannel {
             display.teleportAsync(worldLocation(entity, cfg));
             holo.startFollow(plugin, entity, id);
         }
-        holo.scheduleHide(plugin, entity, id, cfg.hologramHideTicks());
+        holo.share(entity, cfg, fromDamage, viewer);
     }
 
     /**
@@ -147,9 +149,27 @@ public final class HologramChannel {
         return entity.getLocation().add(0.0, entity.getHeight() + cfg.hologramYOffset(), 0.0);
     }
 
-    public void hideIfLookAt(final UUID entityId) {
+    public void concealPlayer(final UUID playerId) {
+        for (final UUID entityId : this.active.keySet().toArray(UUID[]::new)) {
+            final ActiveHolo holo = this.active.get(entityId);
+            if (holo == null) {
+                continue;
+            }
+            holo.dropLookAt(playerId);
+            DisplayViewers.hide(plugin, holo.display(), playerId);
+            if (holo.lookAtOnly() && !holo.hasLookAtViewers()) {
+                remove(entityId);
+            }
+        }
+    }
+
+    public void hideIfLookAt(final UUID playerId, final UUID entityId) {
         final ActiveHolo holo = this.active.get(entityId);
-        if (holo != null && holo.lookAtOnly()) {
+        if (holo == null) {
+            return;
+        }
+        holo.dropLookAt(playerId);
+        if (holo.lookAtOnly() && !holo.hasLookAtViewers()) {
             remove(entityId);
         }
     }
@@ -172,6 +192,7 @@ public final class HologramChannel {
         private final TextDisplay display;
         private final AtomicInteger generation;
         private final boolean mounted;
+        private final Set<UUID> lookAtViewers = ConcurrentHashMap.newKeySet();
         private volatile boolean lookAtOnly;
         private Object followTask;
 
@@ -195,8 +216,36 @@ public final class HologramChannel {
             return lookAtOnly;
         }
 
-        private void markDamage() {
-            this.lookAtOnly = false;
+        private boolean hasLookAtViewers() {
+            return !this.lookAtViewers.isEmpty();
+        }
+
+        private void share(
+                final LivingEntity entity,
+                final PluginConfig cfg,
+                final boolean fromDamage,
+                final @Nullable Player viewer
+        ) {
+            if (fromDamage) {
+                this.lookAtOnly = false;
+                DisplayViewers.show(plugin, display, viewer);
+                DisplayViewers.showNearby(plugin, display, entity.getLocation(), cfg.hologramViewDistance());
+                scheduleHide(plugin, entity, entity.getUniqueId(), cfg.hologramHideTicks());
+                return;
+            }
+            if (viewer != null) {
+                this.lookAtViewers.add(viewer.getUniqueId());
+                DisplayViewers.show(plugin, display, viewer);
+            }
+        }
+
+        private void dropLookAt(final UUID playerId) {
+            if (!this.lookAtViewers.remove(playerId)) {
+                return;
+            }
+            if (this.lookAtOnly) {
+                DisplayViewers.hide(plugin, display, playerId);
+            }
         }
 
         private void startFollow(final LightHealth plugin, final LivingEntity entity, final UUID entityId) {
@@ -251,9 +300,8 @@ public final class HologramChannel {
             this.generation.incrementAndGet();
             Schedulers.cancel(this.followTask);
             this.followTask = null;
-            if (this.display.isValid()) {
-                this.display.remove();
-            }
+            this.lookAtViewers.clear();
+            Schedulers.removeEntity(plugin, this.display);
         }
     }
 }

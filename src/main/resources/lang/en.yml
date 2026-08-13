@@ -2,8 +2,8 @@
 prefix: "<gradient:#FF6B6B:#FFA07A><bold>LightHealth</bold></gradient> <dark_gray>»</dark_gray> "
 
 reloaded: "<green>Config and messages reloaded."
-toggled-on: "<green>Your HP feedback <white>enabled</white> (actionbar, bossbar, holograms & numbers from your hits)."
-toggled-off: "<gray>Your HP feedback <white>disabled</white> (personal bars off; your hits won't spawn holograms/numbers)."
+toggled-on: "<green>Your HP feedback <white>enabled</white> (actionbar, bossbar, holograms & numbers)."
+toggled-off: "<gray>Your HP feedback <white>disabled</white> (you will not see bars, holograms, or numbers)."
 players-only: "<red>Players only."
 no-permission: "<red>No permission."
 unknown-language: "<red>Unknown language. Use: <white>en</white>, <white>ru</white>, <white>es</white>, <white>zh</white>."

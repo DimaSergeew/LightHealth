@@ -36,7 +36,13 @@ class MessagesNormalizeTest {
     void isSupported() {
         assertTrue(Messages.isSupported("en"));
         assertTrue(Messages.isSupported("ru-RU"));
+        assertTrue(Messages.isSupported("es-MX"));
+        assertTrue(Messages.isSupported("zh_CN"));
         assertFalse(Messages.isSupported("de"));
         assertFalse(Messages.isSupported(""));
+        assertFalse(Messages.isSupported("esoteric"));
+        assertFalse(Messages.isSupported("engine"));
+        assertEquals("en", Messages.normalize("esoteric"));
+        assertEquals("es", Messages.normalize("es-MX"));
     }
 }

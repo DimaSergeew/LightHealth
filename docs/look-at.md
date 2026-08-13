@@ -27,9 +27,11 @@ Look-at channels are independent of `display.*`. You can show a hologram on look
 Zero-damage look-at uses `look-at-actionbar` / `look-at-bossbar` templates, so the bar does not print `-0`. See [Config](config.md).
 
 !!! note "Line of sight"
-    The raycast hits **solid blocks**. You cannot read health through walls.
+    The raycast hits **solid blocks**. You cannot read health through walls. Holograms are not see-through, so an already-spawned bar is not readable through blocks either.
 
-    Looking away hides look-at holograms and bars immediately. A **damage** hologram on the same mob stays until its own hide timer.
+    Looking away hides **your** look-at hologram and bars immediately. Other players still looking at the same mob keep their view. A **damage** hologram on the same mob stays until its own hide timer.
+
+    While a damage action bar or boss bar is showing `-<amount>`, look-at will not replace it with the zero-damage template. After the damage duration ends, look-at resumes.
 
 ## Tips
 

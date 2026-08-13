@@ -2,8 +2,8 @@
 prefix: "<gradient:#FF6B6B:#FFA07A><bold>LightHealth</bold></gradient> <dark_gray>»</dark_gray> "
 
 reloaded: "<green>Configuración y mensajes recargados."
-toggled-on: "<green>Tu feedback de vida <white>activado</white> (actionbar, bossbar, hologramas y números de tus golpes)."
-toggled-off: "<gray>Tu feedback de vida <white>desactivado</white> (barras personales off; tus golpes no generan hologramas/números)."
+toggled-on: "<green>Tu feedback de vida <white>activado</white> (actionbar, bossbar, hologramas y números)."
+toggled-off: "<gray>Tu feedback de vida <white>desactivado</white> (no verás barras, hologramas ni números)."
 players-only: "<red>Solo jugadores."
 no-permission: "<red>Sin permiso."
 unknown-language: "<red>Idioma desconocido. Usa: <white>en</white>, <white>ru</white>, <white>es</white>, <white>zh</white>."

@@ -44,5 +44,5 @@ If nothing appears, check [FAQ](faq.md) — usually `/lh toggle` is off, or `lig
 
 ```bash
 ./gradlew build
-# → build/libs/LightHealth-1.0.2.jar
+# → build/libs/LightHealth-1.0.3.jar
 ```

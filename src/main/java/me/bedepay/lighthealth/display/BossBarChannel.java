@@ -80,6 +80,10 @@ public final class BossBarChannel {
         }
 
         TrackedBar tracked = this.bars.get(playerId);
+        if (!fromDamage && tracked != null && tracked.fromDamage) {
+            return;
+        }
+
         if (tracked == null || !tracked.entityId.equals(entityId)) {
             if (tracked != null) {
                 viewer.hideBossBar(tracked.bar());
@@ -98,9 +102,13 @@ public final class BossBarChannel {
             }
         }
 
+        if (!fromDamage) {
+            return;
+        }
+
         final int gen = tracked.generation.incrementAndGet();
         final TrackedBar ref = tracked;
-        Schedulers.globalDelayed(plugin, hideTicks, () -> {
+        Schedulers.entityDelayed(plugin, viewer, hideTicks, () -> {
             if (ref.generation.get() != gen) {
                 return;
             }
@@ -108,9 +116,8 @@ public final class BossBarChannel {
             if (current != ref) {
                 return;
             }
-            final Player online = plugin.getServer().getPlayer(playerId);
-            if (online != null) {
-                online.hideBossBar(ref.bar());
+            if (viewer.isOnline()) {
+                viewer.hideBossBar(ref.bar());
             }
             this.bars.remove(playerId, ref);
         });
@@ -132,20 +139,19 @@ public final class BossBarChannel {
         tracked.generation.incrementAndGet();
         final Player online = plugin.getServer().getPlayer(playerId);
         if (online != null) {
-            online.hideBossBar(tracked.bar());
+            Schedulers.entity(plugin, online, () -> {
+                if (online.isOnline()) {
+                    online.hideBossBar(tracked.bar());
+                }
+            });
         }
     }
 
     public void shutdown() {
         this.lifetime.incrementAndGet();
-        for (final Map.Entry<UUID, TrackedBar> e : this.bars.entrySet()) {
-            e.getValue().generation.incrementAndGet();
-            final Player online = plugin.getServer().getPlayer(e.getKey());
-            if (online != null) {
-                online.hideBossBar(e.getValue().bar());
-            }
+        for (final UUID id : this.bars.keySet().toArray(UUID[]::new)) {
+            removePlayer(id);
         }
-        this.bars.clear();
     }
 
     private static final class TrackedBar {

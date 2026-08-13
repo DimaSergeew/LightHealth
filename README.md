@@ -90,7 +90,7 @@ Full reference: **[commands & permissions](https://dimasergeew.github.io/LightHe
 
 | Permission | Default | Description |
 |------------|---------|-------------|
-| `lighthealth.see` | `true` | See health displays / spawn holograms and numbers from your hits |
+| `lighthealth.see` | `true` | See health displays (bars, holograms, numbers, look-at) |
 | `lighthealth.toggle` | `true` | Use `/lh toggle` |
 | `lighthealth.admin` | `op` | Reload and language |
 
@@ -108,7 +108,7 @@ This is a Paper plugin. It will not load on CraftBukkit or Spigot.
 
 ```bash
 ./gradlew build
-# → build/libs/LightHealth-1.0.2.jar
+# → build/libs/LightHealth-1.0.3.jar
 ```
 
 ## License

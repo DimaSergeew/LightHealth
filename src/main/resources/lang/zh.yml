@@ -2,8 +2,8 @@
 prefix: "<gradient:#FF6B6B:#FFA07A><bold>LightHealth</bold></gradient> <dark_gray>»</dark_gray> "
 
 reloaded: "<green>配置与消息已重新加载。"
-toggled-on: "<green>你的血量反馈已<white>开启</white>（actionbar、bossbar，以及你造成伤害时的全息/数字）。"
-toggled-off: "<gray>你的血量反馈已<white>关闭</white>（个人栏关闭；你的攻击不会生成全息/数字）。"
+toggled-on: "<green>你的血量反馈已<white>开启</white>（actionbar、bossbar、全息和数字）。"
+toggled-off: "<gray>你的血量反馈已<white>关闭</white>（你不会看到个人栏、全息或数字）。"
 players-only: "<red>仅限玩家使用。"
 no-permission: "<red>没有权限。"
 unknown-language: "<red>未知语言。可用：<white>en</white>、<white>ru</white>、<white>es</white>、<white>zh</white>。"

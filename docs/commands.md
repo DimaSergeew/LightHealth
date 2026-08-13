@@ -24,15 +24,15 @@ Aliases: `/lh`, `/lighthealth`, `/mhp`.
     The preference is saved in `player-toggles.yml` and survives quit and restart.
 
     - Your action bar, boss bar, and look-at
-    - Holograms and damage numbers **spawned by your hits**
+    - Holograms and damage numbers **you would otherwise see**
 
-    A hologram from another player’s hit — or from fire, cactus, and similar — can still be visible. See [FAQ](faq.md).
+    Other players with feedback enabled can still see displays from nearby combat. See [FAQ](faq.md).
 
 ## Permissions
 
 | Permission | Default | Description |
 |------------|---------|-------------|
-| `lighthealth.see` | `true` | Receive personal bars and spawn holograms / numbers from your hits |
+| `lighthealth.see` | `true` | See health displays (bars, holograms, numbers, look-at) |
 | `lighthealth.toggle` | `true` | Use `/lh toggle` |
 | `lighthealth.admin` | `op` | Reload and language |
 

@@ -37,7 +37,6 @@ public final class ActionBarChannel {
             return;
         }
 
-        // Format on the entity's thread (name / attributes), then hop to the viewer.
         final Component text = format.actionbar(
                 snap.entity(),
                 snap.health(),
@@ -64,22 +63,28 @@ public final class ActionBarChannel {
         if (!ViewAccess.canSee(plugin, viewer)) {
             return;
         }
-        viewer.sendActionBar(text);
-
         final UUID id = viewer.getUniqueId();
+        if (!fromDamage && Boolean.TRUE.equals(this.lastFromDamage.get(id))) {
+            return;
+        }
+
+        viewer.sendActionBar(text);
         this.lastFromDamage.put(id, fromDamage);
+        if (!fromDamage) {
+            return;
+        }
+
         final AtomicInteger gen = this.generations.computeIfAbsent(id, u -> new AtomicInteger());
         final int token = gen.incrementAndGet();
-        Schedulers.globalDelayed(plugin, duration, () -> {
+        Schedulers.entityDelayed(plugin, viewer, duration, () -> {
             if (gen.get() != token) {
                 return;
             }
-            final Player online = plugin.getServer().getPlayer(id);
-            if (online != null && online.isOnline()) {
-                online.sendActionBar(Component.empty());
+            if (viewer.isOnline()) {
+                viewer.sendActionBar(Component.empty());
             }
             this.generations.remove(id, gen);
-            this.lastFromDamage.remove(id, fromDamage);
+            this.lastFromDamage.remove(id, Boolean.TRUE);
         });
     }
 
@@ -98,13 +103,17 @@ public final class ActionBarChannel {
         }
         final Player online = plugin.getServer().getPlayer(playerId);
         if (online != null) {
-            online.sendActionBar(Component.empty());
+            Schedulers.entity(plugin, online, () -> {
+                if (online.isOnline()) {
+                    online.sendActionBar(Component.empty());
+                }
+            });
         }
     }
 
     public void shutdown() {
         this.lifetime.incrementAndGet();
-        for (final UUID id : this.generations.keySet().toArray(UUID[]::new)) {
+        for (final UUID id : this.lastFromDamage.keySet().toArray(UUID[]::new)) {
             removePlayer(id);
         }
         this.generations.clear();

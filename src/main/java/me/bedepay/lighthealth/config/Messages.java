@@ -53,38 +53,35 @@ public final class Messages {
     }
 
     public static String normalize(final String raw) {
+        final String mapped = mappedLanguage(raw);
+        return mapped != null ? mapped : "en";
+    }
+
+    public static boolean isSupported(final String raw) {
+        return mappedLanguage(raw) != null;
+    }
+
+    static String mappedLanguage(final String raw) {
         if (raw == null || raw.isBlank()) {
-            return "en";
+            return null;
         }
         final String code = raw.trim().toLowerCase(Locale.ROOT);
         if (SUPPORTED.contains(code)) {
             return code;
         }
-        if (code.startsWith("zh") || code.equals("cn") || code.equals("chinese")) {
+        if (code.equals("cn") || code.equals("chinese") || code.startsWith("zh-") || code.startsWith("zh_")) {
             return "zh";
         }
-        if (code.startsWith("ru") || code.equals("russian")) {
+        if (code.equals("russian") || code.startsWith("ru-") || code.startsWith("ru_")) {
             return "ru";
         }
-        if (code.startsWith("es") || code.equals("spanish") || code.equals("español")) {
+        if (code.equals("spanish") || code.equals("español") || code.startsWith("es-") || code.startsWith("es_")) {
             return "es";
         }
-        if (code.startsWith("en") || code.equals("english")) {
+        if (code.equals("english") || code.startsWith("en-") || code.startsWith("en_")) {
             return "en";
         }
-        return "en";
-    }
-
-    public static boolean isSupported(final String raw) {
-        if (raw == null || raw.isBlank()) {
-            return false;
-        }
-        final String code = raw.trim().toLowerCase(Locale.ROOT);
-        return SUPPORTED.contains(code)
-                || code.startsWith("zh") || code.equals("cn")
-                || code.startsWith("ru")
-                || code.startsWith("es")
-                || code.startsWith("en");
+        return null;
     }
 
     /**
