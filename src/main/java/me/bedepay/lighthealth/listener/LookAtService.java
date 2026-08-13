@@ -50,6 +50,14 @@ public final class LookAtService {
         }
     }
 
+    public boolean hasTarget(final UUID playerId) {
+        return this.lastTarget.containsKey(playerId);
+    }
+
+    public boolean isLookingAt(final UUID playerId, final UUID entityId) {
+        return entityId.equals(this.lastTarget.get(playerId));
+    }
+
     private void tick() {
         final LookAtSettings settings = plugin.config().lookAt();
         if (!settings.enabled() || !settings.anyChannel()) {

@@ -1,6 +1,7 @@
 package me.bedepay.lighthealth.display;
 
 import me.bedepay.lighthealth.LightHealth;
+import me.bedepay.lighthealth.config.LookAtSettings;
 import me.bedepay.lighthealth.config.PluginConfig;
 import me.bedepay.lighthealth.util.Schedulers;
 import me.bedepay.lighthealth.util.ViewAccess;
@@ -116,11 +117,20 @@ public final class BossBarChannel {
             if (current != ref) {
                 return;
             }
+            if (keepForLookAt(playerId, ref.entityId)) {
+                ref.fromDamage = false;
+                return;
+            }
             if (viewer.isOnline()) {
                 viewer.hideBossBar(ref.bar());
             }
             this.bars.remove(playerId, ref);
         });
+    }
+
+    private boolean keepForLookAt(final UUID playerId, final UUID entityId) {
+        final LookAtSettings lookAt = plugin.config().lookAt();
+        return lookAt.enabled() && lookAt.bossbar() && plugin.lookAt().isLookingAt(playerId, entityId);
     }
 
     public void hideIfLookAt(final UUID playerId) {

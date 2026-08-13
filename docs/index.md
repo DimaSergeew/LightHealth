@@ -59,7 +59,7 @@ Show mob health and damage on <strong>Paper</strong>, <strong>Purpur</strong>, a
 
 -   **No dependencies** — drop the jar in and restart.
 
--   **Paper family** — Paper, Purpur, and Folia (1.21+ / 26.x).
+-   **Paper family** — Paper, Purpur, and Folia (1.21.4+ / 26.x).
 
 -   **Four locales** — `en` · `ru` · `es` · `zh`.
 

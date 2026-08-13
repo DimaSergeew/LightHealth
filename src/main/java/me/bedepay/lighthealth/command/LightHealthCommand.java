@@ -104,7 +104,7 @@ public final class LightHealthCommand {
         }
         plugin.messages().send(
                 sender,
-                "language-set",
+                "language-current",
                 Placeholder.unparsed("lang", plugin.messages().language())
         );
         return Command.SINGLE_SUCCESS;

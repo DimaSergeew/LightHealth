@@ -290,10 +290,32 @@ public final class HologramChannel {
                     return;
                 }
                 final ActiveHolo current = HologramChannel.this.active.get(entityId);
-                if (current == this) {
-                    remove(entityId);
+                if (current != this) {
+                    return;
                 }
+                if (!this.lookAtViewers.isEmpty()) {
+                    revertToLookAtOnly();
+                    return;
+                }
+                remove(entityId);
             });
+        }
+
+        private void revertToLookAtOnly() {
+            this.lookAtOnly = true;
+            if (!display.isValid()) {
+                return;
+            }
+            final Location loc = display.getLocation();
+            if (loc.getWorld() == null) {
+                return;
+            }
+            final double range = plugin.config().hologramViewDistance();
+            for (final Player player : loc.getWorld().getNearbyPlayers(loc, range)) {
+                if (!this.lookAtViewers.contains(player.getUniqueId())) {
+                    DisplayViewers.hide(plugin, display, player.getUniqueId());
+                }
+            }
         }
 
         private void destroy() {

@@ -8,6 +8,7 @@ players-only: "<red>仅限玩家使用。"
 no-permission: "<red>没有权限。"
 unknown-language: "<red>未知语言。可用：<white>en</white>、<white>ru</white>、<white>es</white>、<white>zh</white>。"
 language-set: "<green>语言已设置为 <white><lang></white>。"
+language-current: "<gray>当前语言：<white><lang></white>。"
 usage:
   - ""
   - "<gradient:#FF6B6B:#FFA07A><bold>LightHealth</bold></gradient>"

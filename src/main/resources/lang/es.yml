@@ -8,6 +8,7 @@ players-only: "<red>Solo jugadores."
 no-permission: "<red>Sin permiso."
 unknown-language: "<red>Idioma desconocido. Usa: <white>en</white>, <white>ru</white>, <white>es</white>, <white>zh</white>."
 language-set: "<green>Idioma cambiado a <white><lang></white>."
+language-current: "<gray>Idioma actual: <white><lang></white>."
 usage:
   - ""
   - "<gradient:#FF6B6B:#FFA07A><bold>LightHealth</bold></gradient>"

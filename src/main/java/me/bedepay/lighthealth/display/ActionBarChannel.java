@@ -1,6 +1,7 @@
 package me.bedepay.lighthealth.display;
 
 import me.bedepay.lighthealth.LightHealth;
+import me.bedepay.lighthealth.config.LookAtSettings;
 import me.bedepay.lighthealth.config.PluginConfig;
 import me.bedepay.lighthealth.util.Schedulers;
 import me.bedepay.lighthealth.util.ViewAccess;
@@ -80,12 +81,22 @@ public final class ActionBarChannel {
             if (gen.get() != token) {
                 return;
             }
+            if (keepForLookAt(id)) {
+                this.lastFromDamage.put(id, Boolean.FALSE);
+                this.generations.remove(id, gen);
+                return;
+            }
             if (viewer.isOnline()) {
                 viewer.sendActionBar(Component.empty());
             }
             this.generations.remove(id, gen);
             this.lastFromDamage.remove(id, Boolean.TRUE);
         });
+    }
+
+    private boolean keepForLookAt(final UUID playerId) {
+        final LookAtSettings lookAt = plugin.config().lookAt();
+        return lookAt.enabled() && lookAt.actionbar() && plugin.lookAt().hasTarget(playerId);
     }
 
     public void hideIfLookAt(final UUID playerId) {

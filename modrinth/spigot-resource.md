@@ -37,8 +37,8 @@ It does not rewrite mob names, add extra gameplay, or need other plugins. Styles
 
 [SIZE=4][B]Requirements[/B][/SIZE]
 [LIST]
-[*][B]Paper / Purpur / Folia[/B] 1.21+ (Paper 26.x included)
-[*]Java [B]25+[/B]
+[*][B]Paper / Purpur / Folia[/B] 1.21.4+ (Paper 26.x included)
+[*]Java [B]21+[/B] on 1.21.x · [B]25+[/B] on 26.x (Minecraft itself requires 25)
 [*][B]No[/B] other plugins
 [/LIST]
 [COLOR=#C0392B]This is a Paper plugin. It will not load on CraftBukkit or Spigot.[/COLOR]

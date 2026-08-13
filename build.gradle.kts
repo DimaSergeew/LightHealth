@@ -24,7 +24,10 @@ dependencies {
 }
 
 java {
+    // Paper 26.2 API is published as JVM 25. Compile with JDK 25, emit Java 21
+    // bytecode so the jar still loads on Paper 1.21.x (Java 21).
     toolchain.languageVersion = JavaLanguageVersion.of(25)
+    disableAutoTargetJvm()
 }
 
 paperPluginYaml {
@@ -73,9 +76,9 @@ tasks {
         jvmArgs("-Xms1G", "-Xmx2G", "-Dcom.mojang.eula.agree=true")
     }
 
-    compileJava {
+    withType<JavaCompile>().configureEach {
         options.encoding = "UTF-8"
-        options.release.set(25)
+        options.release.set(21)
         options.compilerArgs.add("-parameters")
     }
 

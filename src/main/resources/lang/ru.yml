@@ -8,6 +8,7 @@ players-only: "<red>Только для игроков."
 no-permission: "<red>Нет прав."
 unknown-language: "<red>Неизвестный язык. Доступно: <white>en</white>, <white>ru</white>, <white>es</white>, <white>zh</white>."
 language-set: "<green>Язык установлен: <white><lang></white>."
+language-current: "<gray>Текущий язык: <white><lang></white>."
 usage:
   - ""
   - "<gradient:#FF6B6B:#FFA07A><bold>LightHealth</bold></gradient>"

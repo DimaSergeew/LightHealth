@@ -11,7 +11,7 @@ LightHealth is a small **Paper** plugin with one job: when you hit a mob — or 
 
 It does **not** rewrite mob names, add extra gameplay, or need other plugins. Styles and languages live in YAML.
 
-Works on **Paper**, **Purpur**, and **Folia** (1.21+ / Paper 26.x). Languages: English, Russian, Spanish, Chinese.
+Works on **Paper**, **Purpur**, and **Folia** (**1.21.4+** / Paper **26.x**). Languages: English, Russian, Spanish, Chinese.
 
 | Channel | What you see |
 |---------|----------------|
@@ -57,8 +57,8 @@ Aliases: `/lh`, `/lighthealth`, `/mhp`
 
 | | |
 |--|--|
-| Server | Paper, Purpur, or Folia **1.21+** (Paper **26.x** included) |
-| Java | **25+** |
+| Server | Paper, Purpur, or Folia **1.21.4+** (Paper **26.x** included) |
+| Java | **21+** on 1.21.x · **25+** on 26.x (Minecraft itself requires 25) |
 | Dependencies | None |
 
 This is a Paper plugin. It will **not** load on CraftBukkit or Spigot.

@@ -43,7 +43,9 @@
 
 ??? question "Which servers are supported?"
 
-    **Paper, Purpur, and Folia** (1.21+ / Paper 26.x). No hard dependencies.
+    **Paper, Purpur, and Folia** (**1.21.4+** / Paper **26.x**). No hard dependencies.
+
+    Paper **1.21.0 / 1.21.1** is not supported.
 
     This is a Paper plugin (`paper-plugin.yml`, Brigadier, Folia schedulers). It will **not** load on CraftBukkit or Spigot.
 
@@ -57,7 +59,12 @@
 
 ??? question "Which Java version?"
 
-    Minecraft **1.21+ / Paper 26.x** needs **Java 25+**. Older Java will fail to load the plugin.
+    The plugin jar is **Java 21** bytecode.
+
+    | Server | Java to run |
+    |--------|-------------|
+    | Paper **1.21.4+** (before 26.x) | **21+** |
+    | Paper **26.x** | **25+** (required by Minecraft, not only this plugin) |
 
 ??? question "Where do I report issues?"
 
