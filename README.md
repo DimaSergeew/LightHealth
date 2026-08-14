@@ -1,67 +1,78 @@
 <p align="center">
-  <img src="assets/banner.png" alt="LightHealth — mob health feedback" width="800">
-</p>
-
-<h1 align="center">LightHealth</h1>
-
-<p align="center">
-  <b>A lightweight mob health and damage indicator for Paper, Purpur, and Folia.</b><br>
-  Aim to inspect · Hit to see damage · No renamed mobs
+  <img src="assets/github-hero.png" alt="LightHealth — See health. Feel every hit." width="960">
 </p>
 
 <p align="center">
-  <a href="https://dimasergeew.github.io/LightHealth/"><img src="https://img.shields.io/badge/docs-wiki-1DB954?style=flat-square&logo=gitbook&logoColor=white" alt="Documentation"></a>
-  <a href="https://www.spigotmc.org/resources/lighthealth.137519/"><img src="https://img.shields.io/badge/spigotmc-listing-ED8106?style=flat-square" alt="SpigotMC listing"></a>
-  <a href="https://github.com/DimaSergeew/LightHealth/releases/latest"><img src="https://img.shields.io/github/v/release/DimaSergeew/LightHealth?style=flat-square&color=2D6A4F" alt="Latest release"></a>
+  <strong>Private, lightweight combat feedback for modern Minecraft servers.</strong><br>
+  Inspect a mob before the fight. See every hit when combat begins.
+</p>
+
+<p align="center">
+  <a href="https://github.com/DimaSergeew/LightHealth/releases/latest"><img src="https://img.shields.io/github/v/release/DimaSergeew/LightHealth?style=for-the-badge&color=8CD950&label=Download" alt="Download latest release"></a>
+  <a href="https://dimasergeew.github.io/LightHealth/"><img src="https://img.shields.io/badge/Documentation-1F6F54?style=for-the-badge&logo=gitbook&logoColor=white" alt="Documentation"></a>
+  <a href="https://www.spigotmc.org/resources/lighthealth.137519/"><img src="https://img.shields.io/badge/SpigotMC-ED8106?style=for-the-badge&logo=spigotmc&logoColor=white" alt="SpigotMC"></a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Paper-1.21.4+-white?style=flat-square" alt="Paper 1.21.4+">
+  <img src="https://img.shields.io/badge/Purpur-supported-A970FF?style=flat-square" alt="Purpur supported">
+  <img src="https://img.shields.io/badge/Folia-ready-4CAF50?style=flat-square" alt="Folia ready">
+  <img src="https://img.shields.io/badge/Java-21+-E76F00?style=flat-square&logo=openjdk&logoColor=white" alt="Java 21+">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-238636?style=flat-square" alt="MIT License"></a>
-</p>
-
-<p align="center">
-  <a href="https://dimasergeew.github.io/LightHealth/"><b>Documentation</b></a>
-  ·
-  <a href="https://www.spigotmc.org/resources/lighthealth.137519/">SpigotMC</a>
-  ·
-  <a href="https://github.com/DimaSergeew/LightHealth/releases">Releases</a>
 </p>
 
 ---
 
-LightHealth is a focused **mob health plugin and damage indicator**. Aim at a mob
-to inspect its HP without attacking, then see a private health bar and floating
-damage numbers when combat starts.
+## Combat information without the clutter
+
+LightHealth is a focused **mob health plugin and damage indicator** for Paper,
+Purpur, and Folia. Aim at a mob to inspect its HP without attacking, then get
+clear, responsive feedback as soon as combat starts.
 
 Unlike nametag-based health plugins, LightHealth uses per-viewer `TextDisplay`
 holograms. Mob names stay untouched, other players are not forced to see your UI,
 and no dependencies or gameplay changes are added.
 
-Works on **Paper**, **Purpur**, and **Folia** (**1.21.4+** / Paper **26.x**). Locales: English, Russian, Spanish, Chinese.
-
-| Channel | What you see |
-|---------|----------------|
-| **Hologram** | A health bar above the mob (`TextDisplay`) |
-| **Numbers** | Floating damage, colored by amount, with a distinct crit style |
-| **Action / boss bar** | Health and damage, shifting green → yellow → red |
-| **Look-at inspect** | Aim at a mob to check HP before choosing to fight |
+<table>
+  <tr>
+    <td width="33%" align="center">
+      <strong>Inspect</strong><br>
+      Aim at a mob to see its health before attacking.
+    </td>
+    <td width="33%" align="center">
+      <strong>Fight</strong><br>
+      Get holograms, damage numbers, and personal bars.
+    </td>
+    <td width="33%" align="center">
+      <strong>Stay in control</strong><br>
+      Use <code>/lh toggle</code> and <code>/lh status</code> at any time.
+    </td>
+  </tr>
+</table>
 
 <p align="center">
   <img src="assets/gallery.png" alt="In-game preview: health bar and damage number above a wither skeleton" width="720">
 </p>
 
-## Features
+## Why LightHealth?
 
-- **Aim to inspect** — raycast HP feedback without hitting; range and channels configurable
-- **Four display channels** — hologram, damage numbers, action bar, and optional boss bar
-- **Private by design** — per-viewer displays do not rewrite mob nametags
-- **Styles** — `bar`, `hearts`, `numeric`, or `custom` formats with MiniMessage placeholders
-- **Locales** — `en`, `ru`, `es`, `zh` out of the box (`/lh lang`)
-- **Folia-ready** — no soft-dependencies; Paper API only
-- **Player control** — `/lh toggle` persists; `/lh status` explains what is active
+- **Private by design** — displays are shown per viewer and never rewrite mob nametags.
+- **Four display channels** — holograms, floating numbers, action bar, and optional boss bar.
+- **Look-at inspection** — configurable raycast feedback without dealing damage.
+- **Flexible styles** — choose `bar`, `hearts`, `numeric`, or a custom MiniMessage format.
+- **Ready for modern servers** — Paper, Purpur, and Folia with no hard dependencies.
+- **Four bundled locales** — English, Russian, Spanish, and Chinese.
 
-## Install
+## Get started
 
-1. Download `LightHealth-x.y.z.jar` from [GitHub Releases](https://github.com/DimaSergeew/LightHealth/releases/latest) or [SpigotMC](https://www.spigotmc.org/resources/lighthealth.137519/).
-2. Put the jar in `plugins/` and restart the server.
-3. Hit a mob — or look at one. Optionally edit `plugins/LightHealth/config.yml` and run `/lh reload`.
+1. Download the latest jar from **[GitHub Releases](https://github.com/DimaSergeew/LightHealth/releases/latest)**.
+2. Move it into your server's `plugins/` folder.
+3. Restart the server, then look at or hit a mob.
+
+<details>
+<summary><strong>Default configuration</strong></summary>
+
+<br>
 
 ```yaml
 language: en
@@ -73,7 +84,10 @@ display:
   bossbar: false
 ```
 
-More options (look-at, hologram timing, damage-number tiers, custom formats): **[configuration docs](https://dimasergeew.github.io/LightHealth/config/)**.
+</details>
+
+Configure look-at, display timing, damage tiers, styles, and custom formats in the
+**[configuration guide](https://dimasergeew.github.io/LightHealth/config/)**.
 
 ## Commands
 
