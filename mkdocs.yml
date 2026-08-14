@@ -1,5 +1,5 @@
 site_name: LightHealth
-site_description: Show mob health and damage on Paper, Purpur, and Folia.
+site_description: Lightweight mob health bar and damage indicator plugin with look-at inspect for Paper, Purpur, and Folia.
 site_url: https://dimasergeew.github.io/LightHealth/
 repo_url: https://github.com/DimaSergeew/LightHealth
 repo_name: DimaSergeew/LightHealth
@@ -85,9 +85,6 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/DimaSergeew/LightHealth
       name: GitHub
-    - icon: fontawesome/solid/cube
-      link: https://modrinth.com/plugin/lighthealth
-      name: Modrinth
     - icon: fontawesome/solid/book
       link: https://dimasergeew.github.io/LightHealth/
       name: Documentation
@@ -101,4 +98,5 @@ nav:
   - Configure:
       - Config: config.md
       - Look-at: look-at.md
+  - Why LightHealth?: why-lighthealth.md
   - FAQ: faq.md

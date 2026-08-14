@@ -15,7 +15,7 @@ Get LightHealth running in a minute. No other plugins are required.
 
 ## Steps
 
-1. Download `LightHealth-x.y.z.jar` from [Releases](https://github.com/DimaSergeew/LightHealth/releases/latest), [Modrinth](https://modrinth.com/plugin/lighthealth), or the [SpigotMC listing](https://www.spigotmc.org/resources/lighthealth.137519/).
+1. Download `LightHealth-x.y.z.jar` from [GitHub Releases](https://github.com/DimaSergeew/LightHealth/releases/latest) or the [SpigotMC listing](https://www.spigotmc.org/resources/lighthealth.137519/).
 2. Put the jar into `plugins/`.
 3. Start or restart the server.
 4. Hit a mob — or look at one.
@@ -26,7 +26,8 @@ Get LightHealth running in a minute. No other plugins are required.
 
 ## First run
 
-The default style is **bar**. Holograms, damage numbers, action bar, boss bar, and look-at are all on.
+The default style is **bar**. Holograms, damage numbers, action bar, and look-at
+are on. The boss bar is opt-in to keep ordinary combat uncluttered.
 
 ```yaml
 language: en
@@ -35,7 +36,7 @@ display:
   hologram: true
   damage-numbers: true
   actionbar: true
-  bossbar: true
+  bossbar: false
 ```
 
 If nothing appears, check [FAQ](faq.md) — usually `/lh toggle` is off, or `lighthealth.see` is missing.
@@ -46,5 +47,5 @@ You need **JDK 25** to compile (Paper 26.2 API). The published jar is Java 21 by
 
 ```bash
 ./gradlew build
-# → build/libs/LightHealth-1.0.4.jar
+# → build/libs/LightHealth-1.1.0.jar
 ```

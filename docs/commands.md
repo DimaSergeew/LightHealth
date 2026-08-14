@@ -8,6 +8,7 @@ Aliases: `/lh`, `/lighthealth`, `/mhp`.
 |---------|------------|-------------|
 | `/lh` | — | Show help |
 | `/lh toggle` | `lighthealth.toggle` | Turn your personal feedback on or off |
+| `/lh status` | — | Show your personal setting, active channels, look-at, and style |
 | `/lh reload` | `lighthealth.admin` | Reload config and messages |
 | `/lh lang <code>` | `lighthealth.admin` | Set the plugin language |
 

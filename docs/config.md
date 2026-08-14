@@ -14,8 +14,18 @@ display:
   hologram: true
   damage-numbers: true
   actionbar: true
-  bossbar: true
+  bossbar: false
+
+onboarding:
+  enabled: true
 ```
+
+The boss bar is opt-in on new installs to keep ordinary combat uncluttered. Existing
+servers keep their current value when upgrading.
+
+`onboarding.enabled` controls the one-time tip shown after a player's first
+successful hit. The tip explains look-at and `/lh toggle`; seen state is stored in
+`player-toggles.yml`.
 
 | `style` | Effect |
 |---------|--------|

@@ -4,6 +4,8 @@ import me.bedepay.lighthealth.LightHealth;
 import me.bedepay.lighthealth.display.FormatService;
 import me.bedepay.lighthealth.util.Crits;
 import me.bedepay.lighthealth.util.DamageViewers;
+import me.bedepay.lighthealth.util.Schedulers;
+import me.bedepay.lighthealth.util.ViewAccess;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,6 +41,19 @@ public final class DamageListener implements Listener {
         final Player viewer = DamageViewers.of(event);
 
         plugin.displays().onDamage(living, healthAfter, max, damage, critical, viewer);
+        showOnboarding(viewer, damage);
+    }
+
+    private void showOnboarding(final Player viewer, final double damage) {
+        if (viewer == null
+                || damage <= 0.0
+                || !plugin.config().onboarding().enabled()
+                || !ViewAccess.canSee(plugin, viewer)
+                || !plugin.prefs().markOnboardingShown(viewer.getUniqueId())) {
+            return;
+        }
+        Schedulers.entity(plugin, viewer, () ->
+                plugin.messages().send(viewer, "onboarding-first-hit"));
     }
 
     @EventHandler

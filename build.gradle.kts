@@ -36,7 +36,7 @@ paperPluginYaml {
     main = "me.bedepay.lighthealth.LightHealth"
     apiVersion = "1.21"
     authors = listOf("bedepay")
-    description = "Modern mob health feedback for Paper/Purpur/Folia: hologram, damage numbers, actionbar, bossbar."
+    description = "Mob health bar and damage indicator with look-at inspect for Paper, Purpur, and Folia."
     foliaSupported = true
 
     permissions.register("lighthealth.see") {

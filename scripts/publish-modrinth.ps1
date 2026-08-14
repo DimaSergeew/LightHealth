@@ -8,19 +8,28 @@
   Scopes: project:create, project:write, version:create, version:write (PAT with full project access).
 #>
 param(
-    [string]$Version = "1.0.3",
+    [string]$Version = "",
     [string]$Jar = "",
     [string]$Slug = "lighthealth",
     [switch]$Draft
 )
 
 $ErrorActionPreference = "Stop"
+$root = Split-Path -Parent $PSScriptRoot
+if ([string]::IsNullOrWhiteSpace($Version)) {
+    $versionLine = Get-Content (Join-Path $root "gradle.properties") |
+        Where-Object { $_ -match '^version=' } |
+        Select-Object -First 1
+    if (-not $versionLine) {
+        throw "Could not read version from gradle.properties"
+    }
+    $Version = ($versionLine -split '=', 2)[1].Trim()
+}
 $token = $env:MODRINTH_TOKEN
 if ([string]::IsNullOrWhiteSpace($token)) {
     throw "Set MODRINTH_TOKEN environment variable first (Modrinth PAT)."
 }
 
-$root = Split-Path -Parent $PSScriptRoot
 if (-not $Jar) {
     $Jar = Join-Path $root "build\libs\LightHealth-$Version.jar"
 }
@@ -30,8 +39,9 @@ if (-not (Test-Path $Jar)) {
 
 $bodyPath = Join-Path $root "modrinth\body.md"
 $iconPath = Join-Path $root "assets\icon.png"
-$galleryPath = Join-Path $root "assets\gallery.png"
+$releaseNotesPath = Join-Path $root "RELEASE_NOTES.md"
 $body = Get-Content -Raw -Encoding UTF8 $bodyPath
+$changelog = Get-Content -Raw -Encoding UTF8 $releaseNotesPath
 
 $headers = @{
     Authorization = $token
@@ -69,13 +79,13 @@ try {
     $projectData = @{
         slug            = $Slug
         title           = "LightHealth"
-        description     = "Show mob health and damage — hologram, numbers, action bar, boss bar, look-at. Paper / Purpur / Folia."
+        description     = "Mob health bar and damage indicator with look-at inspect for Paper, Purpur, and Folia."
         categories      = @("utility", "game-mechanics")
         client_side     = "unsupported"
         server_side     = "required"
         body            = $body
         status          = "draft"
-        project_type    = "mod"
+        project_type    = "plugin"
         is_draft        = $true
         license_id      = "MIT"
         issues_url      = "https://github.com/DimaSergeew/LightHealth/issues"
@@ -131,7 +141,7 @@ $projectId = $project.id
 try {
     Invoke-Mr -Method PATCH -Url "$api/project/$projectId" -Hdr $headers -Body @{
         body        = $body
-        description = "Show mob health and damage — hologram, numbers, action bar, boss bar, look-at. Paper / Purpur / Folia."
+        description = "Mob health bar and damage indicator with look-at inspect for Paper, Purpur, and Folia."
         categories  = @("utility", "game-mechanics")
         issues_url  = "https://github.com/DimaSergeew/LightHealth/issues"
         source_url  = "https://github.com/DimaSergeew/LightHealth"
@@ -141,30 +151,6 @@ try {
 } catch {
     Write-Warning "Could not patch project metadata: $_"
 }
-
-# --- upload version ---
-$changelog = @"
-## $Version
-
-Bugfix release for **Paper / Purpur / Folia**.
-
-### Fixes
-- Look-at no longer replaces the hit action bar / boss bar ``-<amount>``
-- Looking away no longer hides the hologram for other players still aiming at that mob
-- Holograms and damage numbers are no longer readable through walls
-- ``/lh toggle`` and ``lighthealth.see`` now hide TextDisplays from that observer
-- Folia: look-at reads player state on the player thread; displays are removed on their own scheduler
-- Mob names use the client translation; players show their actual name
-- Pet / TNT / lingering potion / lightning owners are treated as the viewer
-
-### Improvements
-- Look-at hide timers no longer reschedule every scan tick
-- Spectator / lost permission clears look-at immediately
-- ``player-toggles.yml`` saves under a lock
-- ``/lh lang esoteric`` is no longer accepted as Spanish
-
-GitHub: https://github.com/DimaSergeew/LightHealth/releases/tag/v$Version
-"@
 
 $jarBytes = [System.IO.File]::ReadAllBytes($Jar)
 $jarName = [System.IO.Path]::GetFileName($Jar)
@@ -176,9 +162,9 @@ $versionData = @{
     version_number = $Version
     changelog      = $changelog
     dependencies   = @()
-    game_versions  = @("1.21", "1.21.1", "1.21.2", "1.21.3", "1.21.4", "1.21.5", "1.21.6", "1.21.7", "1.21.8", "1.21.9", "1.21.10", "1.21.11", "26.1", "26.1.1", "26.1.2", "26.2")
+    game_versions  = @("1.21.4", "1.21.5", "1.21.6", "1.21.7", "1.21.8", "1.21.9", "1.21.10", "1.21.11", "26.1", "26.1.1", "26.1.2", "26.2")
     version_type   = "release"
-    loaders        = @("bukkit", "spigot", "paper", "purpur", "folia")
+    loaders        = @("paper", "purpur", "folia")
     featured       = $true
     status         = if ($Draft) { "draft" } else { "listed" }
     project_id     = $projectId

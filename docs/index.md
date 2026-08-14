@@ -8,7 +8,7 @@ hide:
 ![LightHealth banner](assets/banner.png){ .hero }
 
 <p class="lh-lead">
-Show mob health and damage on <strong>Paper</strong>, <strong>Purpur</strong>, and <strong>Folia</strong> — clearly, and nothing else.
+A lightweight mob health and damage indicator for <strong>Paper</strong>, <strong>Purpur</strong>, and <strong>Folia</strong>. Aim to inspect, hit to see damage, and keep mob names untouched.
 </p>
 
 <div class="lh-actions" markdown>
@@ -45,7 +45,7 @@ Show mob health and damage on <strong>Paper</strong>, <strong>Purpur</strong>, a
 
     ---
 
-    The same feedback while you aim at a mob — no hit required.
+    Inspect a mob's HP before choosing to fight — no hit required.
 
 </div>
 
@@ -58,6 +58,8 @@ Show mob health and damage on <strong>Paper</strong>, <strong>Purpur</strong>, a
 -   **One job** — health and damage only. No extra gameplay.
 
 -   **No dependencies** — drop the jar in and restart.
+
+-   **Private by design** — per-viewer displays, no rewritten mob nametags.
 
 -   **Paper family** — Paper, Purpur, and Folia (1.21.4+ / 26.x).
 
@@ -80,6 +82,10 @@ Show mob health and damage on <strong>Paper</strong>, <strong>Purpur</strong>, a
 -   [:material-cog: Config](config.md)
 
     Styles, channels, formats, and blacklists.
+
+-   [:material-lightbulb-outline: Why LightHealth](why-lighthealth.md)
+
+    See how it stays clear without taking over nametags or gameplay.
 
 -   [:material-frequently-asked-questions: FAQ](faq.md)
 

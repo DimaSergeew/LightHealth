@@ -9,7 +9,12 @@ display:
   hologram: true
   damage-numbers: true
   actionbar: true
-  bossbar: true
+  # Opt-in: keeping this off avoids treating every mob like a boss.
+  bossbar: false
+
+# Show each player one short tip after their first successful hit.
+onboarding:
+  enabled: true
 
 hologram:
   # When true, damage-triggered holograms skip 0-damage hits only (not other channels).

@@ -82,6 +82,7 @@ public final class PluginConfig {
     private final boolean worldsAsWhitelist;
     private final boolean showPlayers;
     private final LookAtSettings lookAt;
+    private final OnboardingSettings onboarding;
 
     private PluginConfig(
             final Style style,
@@ -128,7 +129,8 @@ public final class PluginConfig {
             final Set<String> worlds,
             final boolean worldsAsWhitelist,
             final boolean showPlayers,
-            final LookAtSettings lookAt
+            final LookAtSettings lookAt,
+            final OnboardingSettings onboarding
     ) {
         this.style = style;
         this.hologram = hologram;
@@ -175,6 +177,7 @@ public final class PluginConfig {
         this.worldsAsWhitelist = worldsAsWhitelist;
         this.showPlayers = showPlayers;
         this.lookAt = lookAt;
+        this.onboarding = onboarding;
     }
 
     public static PluginConfig load(final JavaPlugin plugin) {
@@ -275,7 +278,7 @@ public final class PluginConfig {
                 c.getBoolean("display.hologram", true),
                 c.getBoolean("display.damage-numbers", true),
                 c.getBoolean("display.actionbar", true),
-                c.getBoolean("display.bossbar", true),
+                c.getBoolean("display.bossbar", false),
                 c.getBoolean("hologram.only-when-damaged", true),
                 Math.max(1, c.getInt("hologram.hide-after-ticks", 40)),
                 Math.max(1.0, c.getDouble("hologram.view-distance", 16.0)),
@@ -316,7 +319,8 @@ public final class PluginConfig {
                 Set.copyOf(worlds),
                 c.getBoolean("blacklist.worlds-as-whitelist", false),
                 c.getBoolean("players", false),
-                LookAtSettings.load(c)
+                LookAtSettings.load(c),
+                OnboardingSettings.load(c)
         );
     }
 
@@ -663,6 +667,10 @@ public final class PluginConfig {
 
     public LookAtSettings lookAt() {
         return lookAt;
+    }
+
+    public OnboardingSettings onboarding() {
+        return onboarding;
     }
 
     public boolean isEntityAllowed(final EntityType type) {

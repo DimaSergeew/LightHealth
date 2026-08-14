@@ -4,12 +4,12 @@
   Upload a LightHealth version to Hangar (PaperMC).
 
 .NOTES
-  Reads HANGAR_API_TOKEN or falls back to ~/.grok/secrets/api-keys.md (Hangar section).
+  Reads HANGAR_API_TOKEN (or HANGAR_API_KEY) from the environment.
   API key MUST include scopes: create_version (+ create_project recommended).
   Project is created once; this script only uploads versions.
 #>
 param(
-    [string]$Version = "1.0.1",
+    [string]$Version = "",
     [string]$Jar = "",
     [string]$Slug = "LightHealth",
     [string]$Channel = "Release"
@@ -17,20 +17,24 @@ param(
 
 $ErrorActionPreference = "Stop"
 $ua = "LightHealth-Publish/1.0 (github.com/DimaSergeew/LightHealth)"
+$root = Split-Path -Parent $PSScriptRoot
+if ([string]::IsNullOrWhiteSpace($Version)) {
+    $versionLine = Get-Content (Join-Path $root "gradle.properties") |
+        Where-Object { $_ -match '^version=' } |
+        Select-Object -First 1
+    if (-not $versionLine) {
+        throw "Could not read version from gradle.properties"
+    }
+    $Version = ($versionLine -split '=', 2)[1].Trim()
+}
 
 function Get-HangarToken {
     if ($env:HANGAR_API_TOKEN) { return $env:HANGAR_API_TOKEN.Trim() }
     if ($env:HANGAR_API_KEY) { return $env:HANGAR_API_KEY.Trim() }
-    $secrets = Join-Path $env:USERPROFILE ".grok\secrets\api-keys.md"
-    if (Test-Path $secrets) {
-        $raw = Get-Content -Raw $secrets
-        if ($raw -match 'API key:\s*`([^`]+)`') { return $Matches[1].Trim() }
-    }
-    throw "No Hangar token. Set HANGAR_API_TOKEN or update ~/.grok/secrets/api-keys.md"
+    throw "No Hangar token. Set HANGAR_API_TOKEN (or HANGAR_API_KEY)."
 }
 
 $token = Get-HangarToken
-$root = Split-Path -Parent $PSScriptRoot
 if (-not $Jar) {
     $Jar = Join-Path $root "build\libs\LightHealth-$Version.jar"
 }
@@ -40,14 +44,8 @@ $auth = Invoke-RestMethod -Uri "https://hangar.papermc.io/api/v1/authenticate?ap
 $jwt = $auth.token
 Write-Host "Authenticated as Hangar session (exp in JWT)."
 
-$changelog = @"
-## $Version
-
-Release for Spigot / Paper / Purpur / Folia.
-
-GitHub: https://github.com/DimaSergeew/LightHealth/releases/tag/v$Version
-Modrinth: https://modrinth.com/plugin/lighthealth
-"@
+$releaseNotesPath = Join-Path $root "RELEASE_NOTES.md"
+$changelog = Get-Content -Raw -Encoding UTF8 $releaseNotesPath
 
 $versionUpload = @{
     version               = $Version
@@ -78,7 +76,7 @@ if ($resp -notmatch "HTTP:200") {
 
 If you see 404 Not Found: recreate the Hangar API key with scope **create_version**
 (Hangar → Settings → API keys → tick create_version + create_project).
-Update ~/.grok/secrets/api-keys.md with the new key.
+Set the new key in HANGAR_API_TOKEN.
 "@
     exit 1
 }

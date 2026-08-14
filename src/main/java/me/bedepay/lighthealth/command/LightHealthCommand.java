@@ -12,6 +12,8 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public final class LightHealthCommand {
@@ -29,6 +31,8 @@ public final class LightHealthCommand {
                         .executes(ctx -> help(ctx.getSource().getSender())))
                 .then(Commands.literal("toggle")
                         .executes(ctx -> toggle(ctx.getSource().getSender())))
+                .then(Commands.literal("status")
+                        .executes(ctx -> status(ctx.getSource().getSender())))
                 .then(Commands.literal("reload")
                         .executes(ctx -> reload(ctx.getSource().getSender())))
                 .then(Commands.literal("lang")
@@ -67,6 +71,59 @@ public final class LightHealthCommand {
     private int help(final CommandSender sender) {
         plugin.messages().sendList(sender, "usage");
         return Command.SINGLE_SUCCESS;
+    }
+
+    private int status(final CommandSender sender) {
+        if (!(sender instanceof Player player)) {
+            plugin.messages().send(sender, "players-only");
+            return 0;
+        }
+        final PluginConfig config = plugin.config();
+        final boolean enabled = plugin.prefs().isEnabled(player.getUniqueId());
+        final boolean lookAtEnabled = config.lookAt().enabled() && config.lookAt().anyChannel();
+        plugin.messages().sendList(
+                player,
+                "status",
+                Placeholder.parsed("state", plugin.messages().raw(enabled ? "status-on" : "status-off")),
+                Placeholder.unparsed("channels", displayChannels(config)),
+                Placeholder.parsed(
+                        "look_at_state",
+                        plugin.messages().raw(lookAtEnabled ? "status-on" : "status-off")
+                ),
+                Placeholder.unparsed("look_at_channels", lookAtChannels(config)),
+                Placeholder.unparsed("style", config.style().name().toLowerCase(Locale.ROOT))
+        );
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private String displayChannels(final PluginConfig config) {
+        final List<String> channels = new ArrayList<>();
+        addIfEnabled(channels, config.hologram(), "hologram");
+        addIfEnabled(channels, config.damageNumbers(), "numbers");
+        addIfEnabled(channels, config.actionbar(), "actionbar");
+        addIfEnabled(channels, config.bossbar(), "bossbar");
+        return channelList(channels);
+    }
+
+    private String lookAtChannels(final PluginConfig config) {
+        if (!config.lookAt().enabled()) {
+            return plugin.messages().raw("status-none");
+        }
+        final List<String> channels = new ArrayList<>();
+        addIfEnabled(channels, config.lookAt().hologram(), "hologram");
+        addIfEnabled(channels, config.lookAt().actionbar(), "actionbar");
+        addIfEnabled(channels, config.lookAt().bossbar(), "bossbar");
+        return channelList(channels);
+    }
+
+    private String channelList(final List<String> channels) {
+        return channels.isEmpty() ? plugin.messages().raw("status-none") : String.join(", ", channels);
+    }
+
+    private static void addIfEnabled(final List<String> channels, final boolean enabled, final String name) {
+        if (enabled) {
+            channels.add(name);
+        }
     }
 
     private int toggle(final CommandSender sender) {

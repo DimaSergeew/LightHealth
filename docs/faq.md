@@ -6,6 +6,17 @@
 
     On startup and reload, missing keys from newer plugin versions are merged into `config.yml` without overwriting your values.
 
+??? question "Can I disable the first-hit tip?"
+
+    Yes. The tip is shown once per player and introduces look-at and `/lh toggle`.
+
+    ```yaml
+    onboarding:
+      enabled: false
+    ```
+
+    Run `/lh reload` after changing it.
+
 ??? question "The boss bar or action bar never shows"
 
     They need a **viewer** — the attacking player, or the player looking at the mob. Environmental damage with no player damager will not open personal bars.

@@ -5,7 +5,7 @@ Listed on SpigotMC for discovery. Built for the Paper family.
 ## Short description (line under the resource title)
 
 ```text
-Show mob health and damage — hologram, numbers, action bar, boss bar, look-at. Paper / Purpur / Folia.
+Mob health bar & damage indicator with look-at inspect, holograms and numbers. Paper / Purpur / Folia.
 ```
 
 ## Overview (BBCode)
@@ -16,12 +16,12 @@ Paste this into the **Overview** / Resource Description field in BBCode mode.
 [CENTER][IMG]https://raw.githubusercontent.com/DimaSergeew/LightHealth/main/assets/banner.png[/IMG][/CENTER]
 
 [CENTER][SIZE=5][B]LightHealth[/B][/SIZE]
-[SIZE=4]Show mob health and damage — clearly, and nothing else[/SIZE]
-Holograms · floating numbers · action bar · boss bar · look-at[/CENTER]
+[SIZE=4]Aim to inspect · Hit to see damage · No renamed mobs[/SIZE]
+Lightweight mob health and damage indicator for Paper, Purpur and Folia[/CENTER]
 
-LightHealth is a small [B]Paper[/B] plugin with one job: when you hit a mob — or look at one — you see its [B]health[/B] and the [B]damage you dealt[/B].
+LightHealth is a focused [B]mob health plugin and damage indicator[/B]. Aim at a mob to inspect its HP without attacking, then see a private health bar and floating damage numbers when combat starts.
 
-It does not rewrite mob names, add extra gameplay, or need other plugins. Styles and languages live in YAML.
+Unlike nametag-based health plugins, LightHealth uses per-viewer [FONT=courier new]TextDisplay[/FONT] holograms. Mob names stay untouched, other players are not forced to see your UI, and there are no dependencies or gameplay changes.
 
 [CENTER][IMG]https://raw.githubusercontent.com/DimaSergeew/LightHealth/main/assets/gallery.png[/IMG][/CENTER]
 
@@ -53,6 +53,7 @@ It does not rewrite mob names, add extra gameplay, or need other plugins. Styles
 [SIZE=4][B]Commands[/B][/SIZE]
 [LIST]
 [*][B]/lh toggle[/B] — personal feedback on or off
+[*][B]/lh status[/B] — show your active channels, look-at, and style
 [*][B]/lh reload[/B] — reload the config (admin)
 [*][B]/lh lang en|ru|es|zh[/B] — plugin language (admin)
 [/LIST]
@@ -62,7 +63,7 @@ Aliases: [B]/lighthealth[/B], [B]/mhp[/B]
 [LIST]
 [*]Docs: [URL]https://dimasergeew.github.io/LightHealth/[/URL]
 [*]GitHub: [URL]https://github.com/DimaSergeew/LightHealth[/URL]
-[*]Modrinth: [URL]https://modrinth.com/plugin/lighthealth[/URL]
+[*]Download: [URL]https://github.com/DimaSergeew/LightHealth/releases/latest[/URL]
 [/LIST]
 
 [I]Free · MIT · no dependencies[/I]
