@@ -14,6 +14,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/DimaSergeew/LightHealth/actions/workflows/build.yml"><img src="https://img.shields.io/github/actions/workflow/status/DimaSergeew/LightHealth/build.yml?branch=main&style=flat-square&label=build" alt="Build status"></a>
   <img src="https://img.shields.io/badge/Paper-1.21.4+-white?style=flat-square" alt="Paper 1.21.4+">
   <img src="https://img.shields.io/badge/Purpur-supported-A970FF?style=flat-square" alt="Purpur supported">
   <img src="https://img.shields.io/badge/Folia-ready-4CAF50?style=flat-square" alt="Folia ready">
@@ -29,9 +30,8 @@ LightHealth is a focused **mob health plugin and damage indicator** for Paper,
 Purpur, and Folia. Aim at a mob to inspect its HP without attacking, then get
 clear, responsive feedback as soon as combat starts.
 
-Unlike nametag-based health plugins, LightHealth uses per-viewer `TextDisplay`
-holograms. Mob names stay untouched, other players are not forced to see your UI,
-and no dependencies or gameplay changes are added.
+Every display is drawn per viewer with `TextDisplay` entities, so mob names stay
+untouched, nobody is forced to see your UI, and no other plugin is required.
 
 <table>
   <tr>
@@ -54,14 +54,38 @@ and no dependencies or gameplay changes are added.
   <img src="assets/gallery.png" alt="In-game preview: health bar and damage number above a wither skeleton" width="720">
 </p>
 
-## Why LightHealth?
+## What players see
 
-- **Private by design** — displays are shown per viewer and never rewrite mob nametags.
-- **Four display channels** — holograms, floating numbers, action bar, and optional boss bar.
-- **Look-at inspection** — configurable raycast feedback without dealing damage.
-- **Flexible styles** — choose `bar`, `hearts`, `numeric`, or a custom MiniMessage format.
-- **Ready for modern servers** — Paper, Purpur, and Folia with no hard dependencies.
-- **Four bundled locales** — English, Russian, Spanish, and Chinese.
+| Channel | What the player sees | Default |
+|---------|----------------------|---------|
+| **Hologram** | A health bar floating above the mob | On |
+| **Damage numbers** | Rising amounts, colored by how hard you hit, with a distinct crit look | On |
+| **Action bar** | Personal health and damage line, shifting green → yellow → red | On |
+| **Boss bar** | The same feedback at the top of the screen, for bosses and arenas | Off |
+| **Look-at inspect** | A mob's HP while you aim at it, no hit required | On |
+
+## Not a nametag plugin
+
+| | Nametag-based plugins | LightHealth |
+|--|--|--|
+| Mob names | Rewritten with HP text | Untouched |
+| Visibility | Everyone sees the same tag | Per viewer, `/lh toggle` opt-out |
+| Damage feedback | Usually none | Floating numbers with crit styling |
+| Before the fight | Hit first, then read HP | Aim to inspect |
+| Dependencies | Often ProtocolLib or similar | None |
+
+## Pick a style
+
+Set `style` in `config.yml`, or write your own MiniMessage template.
+
+| Style | Example |
+|-------|---------|
+| `bar` | `[██████████░░] 17/20` |
+| `hearts` | `❤❤❤❤❤❤❤❤❤❤ 17/20` (missing hearts dim to gray) |
+| `numeric` | `❤ 17/20` |
+| `custom` | `<bar> <white><health></white>/<gray><max></gray>` |
+
+Placeholders: `<health>` `<max>` `<percent>` `<amount>` `<name>` `<hearts>` `<bar>` `<symbol>`.
 
 ## Get started
 
@@ -82,12 +106,22 @@ display:
   damage-numbers: true
   actionbar: true
   bossbar: false
+
+look-at:
+  enabled: true
+  range: 12
+  show:
+    hologram: true
+    actionbar: true
+    bossbar: false
 ```
 
 </details>
 
-Configure look-at, display timing, damage tiers, styles, and custom formats in the
+Damage tiers, timings, view distances, blacklists, and custom formats live in the
 **[configuration guide](https://dimasergeew.github.io/LightHealth/config/)**.
+Missing keys are merged in automatically after an update, so your `config.yml`
+survives upgrades.
 
 ## Commands
 
@@ -118,6 +152,7 @@ Full reference: **[commands & permissions](https://dimasergeew.github.io/LightHe
 | Server | Paper, Purpur, or Folia **1.21.4+** (Paper **26.x** included) |
 | Java | **21+** on 1.21.x · **25+** on 26.x (Minecraft itself requires 25) |
 | Dependencies | None |
+| Languages | English, Russian, Spanish, Chinese |
 
 This is a Paper plugin. It will not load on CraftBukkit or Spigot.
 
@@ -129,6 +164,16 @@ You need **JDK 25** to compile (Paper 26.2 API). The published jar is Java 21 by
 ./gradlew build
 # → build/libs/LightHealth-1.1.0.jar
 ```
+
+Every push and pull request runs the same build and unit tests on
+[GitHub Actions](https://github.com/DimaSergeew/LightHealth/actions/workflows/build.yml).
+
+## Links
+
+**[Documentation](https://dimasergeew.github.io/LightHealth/)** ·
+**[Releases](https://github.com/DimaSergeew/LightHealth/releases)** ·
+**[Report an issue](https://github.com/DimaSergeew/LightHealth/issues)** ·
+**[SpigotMC](https://www.spigotmc.org/resources/lighthealth.137519/)**
 
 ## License
 
