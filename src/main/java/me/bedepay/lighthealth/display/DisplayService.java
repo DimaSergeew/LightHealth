@@ -17,7 +17,7 @@ public final class DisplayService {
     private final DamageNumberChannel damageNumbers;
     private final ActionBarChannel actionbar;
     private final BossBarChannel bossbar;
-    private FormatService format;
+    private volatile FormatService format;
 
     public DisplayService(final LightHealth plugin) {
         this.plugin = plugin;
@@ -126,6 +126,9 @@ public final class DisplayService {
     public void onPlayerQuit(final UUID playerId) {
         this.bossbar.removePlayer(playerId);
         this.actionbar.removePlayer(playerId);
+        // EntityRemoveEvent is never fired for players, so their victim state is dropped here.
+        this.hologram.remove(playerId);
+        this.damageNumbers.removeVictim(playerId);
     }
 
     public void clearPersonal(final UUID playerId) {

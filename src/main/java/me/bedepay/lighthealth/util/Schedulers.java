@@ -97,22 +97,6 @@ public final class Schedulers {
         }
     }
 
-    public static void global(final Plugin plugin, final Runnable task) {
-        if (FOLIA) {
-            Bukkit.getGlobalRegionScheduler().run(plugin, scheduled -> task.run());
-        } else {
-            Bukkit.getScheduler().runTask(plugin, task);
-        }
-    }
-
-    public static void globalDelayed(final Plugin plugin, final long delayTicks, final Runnable task) {
-        if (FOLIA) {
-            Bukkit.getGlobalRegionScheduler().runDelayed(plugin, scheduled -> task.run(), Math.max(1L, delayTicks));
-        } else {
-            Bukkit.getScheduler().runTaskLater(plugin, task, delayTicks);
-        }
-    }
-
     public static Object globalTimer(
             final Plugin plugin,
             final long delayTicks,

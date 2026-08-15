@@ -34,4 +34,20 @@ class PlayerPrefsTest {
         assertTrue(reloaded.toggle(playerId));
         assertTrue(reloaded.hasSeenOnboarding(playerId));
     }
+
+    @Test
+    void reloadPicksUpExternalEdits() {
+        final File file = tempDir.resolve("player-toggles.yml").toFile();
+        final UUID playerId = UUID.randomUUID();
+        final PlayerPrefs prefs = new PlayerPrefs(file, Logger.getAnonymousLogger());
+
+        assertFalse(prefs.toggle(playerId));
+        assertFalse(prefs.isEnabled(playerId));
+
+        final PlayerPrefs editor = new PlayerPrefs(file, Logger.getAnonymousLogger());
+        assertTrue(editor.toggle(playerId));
+
+        prefs.reload();
+        assertTrue(prefs.isEnabled(playerId));
+    }
 }

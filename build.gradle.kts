@@ -34,7 +34,9 @@ paperPluginYaml {
     name = "LightHealth"
     version = project.version.toString()
     main = "me.bedepay.lighthealth.LightHealth"
-    apiVersion = "1.21"
+    // Attribute.MAX_HEALTH only exists from 1.21.3; refuse to load on older servers
+    // instead of failing with NoSuchFieldError on the first hit.
+    apiVersion = "1.21.4"
     authors = listOf("bedepay")
     description = "Mob health bar and damage indicator with look-at inspect for Paper, Purpur, and Folia."
     foliaSupported = true

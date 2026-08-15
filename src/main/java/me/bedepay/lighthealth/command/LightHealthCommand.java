@@ -2,6 +2,7 @@ package me.bedepay.lighthealth.command;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -35,37 +36,27 @@ public final class LightHealthCommand {
                         .executes(ctx -> status(ctx.getSource().getSender())))
                 .then(Commands.literal("reload")
                         .executes(ctx -> reload(ctx.getSource().getSender())))
-                .then(Commands.literal("lang")
-                        .executes(ctx -> langInfo(ctx.getSource().getSender()))
-                        .then(Commands.argument("code", StringArgumentType.word())
-                                .suggests((ctx, builder) -> {
-                                    final String rem = builder.getRemaining().toLowerCase(Locale.ROOT);
-                                    for (final String code : Messages.SUPPORTED) {
-                                        if (code.startsWith(rem)) {
-                                            builder.suggest(code);
-                                        }
-                                    }
-                                    return builder.buildFuture();
-                                })
-                                .executes(ctx -> langSet(
-                                        ctx.getSource().getSender(),
-                                        StringArgumentType.getString(ctx, "code")))))
-                .then(Commands.literal("language")
-                        .executes(ctx -> langInfo(ctx.getSource().getSender()))
-                        .then(Commands.argument("code", StringArgumentType.word())
-                                .suggests((ctx, builder) -> {
-                                    final String rem = builder.getRemaining().toLowerCase(Locale.ROOT);
-                                    for (final String code : Messages.SUPPORTED) {
-                                        if (code.startsWith(rem)) {
-                                            builder.suggest(code);
-                                        }
-                                    }
-                                    return builder.buildFuture();
-                                })
-                                .executes(ctx -> langSet(
-                                        ctx.getSource().getSender(),
-                                        StringArgumentType.getString(ctx, "code")))))
+                .then(langNode("lang"))
+                .then(langNode("language"))
                 .build();
+    }
+
+    private LiteralArgumentBuilder<CommandSourceStack> langNode(final String literal) {
+        return Commands.literal(literal)
+                .executes(ctx -> langInfo(ctx.getSource().getSender()))
+                .then(Commands.argument("code", StringArgumentType.word())
+                        .suggests((ctx, builder) -> {
+                            final String rem = builder.getRemaining().toLowerCase(Locale.ROOT);
+                            for (final String code : Messages.SUPPORTED) {
+                                if (code.startsWith(rem)) {
+                                    builder.suggest(code);
+                                }
+                            }
+                            return builder.buildFuture();
+                        })
+                        .executes(ctx -> langSet(
+                                ctx.getSource().getSender(),
+                                StringArgumentType.getString(ctx, "code"))));
     }
 
     private int help(final CommandSender sender) {

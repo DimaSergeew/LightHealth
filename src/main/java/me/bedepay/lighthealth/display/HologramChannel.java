@@ -34,10 +34,6 @@ public final class HologramChannel {
         this.plugin = plugin;
     }
 
-    public void handle(final HealthSnapshot snap, final FormatService format) {
-        handle(snap, format, true);
-    }
-
     public void handle(final HealthSnapshot snap, final FormatService format, final boolean fromDamage) {
         final PluginConfig cfg = plugin.config();
         if (fromDamage && !cfg.hologram()) {
@@ -194,7 +190,7 @@ public final class HologramChannel {
         private final boolean mounted;
         private final Set<UUID> lookAtViewers = ConcurrentHashMap.newKeySet();
         private volatile boolean lookAtOnly;
-        private Object followTask;
+        private volatile Object followTask;
 
         private ActiveHolo(
                 final TextDisplay display,

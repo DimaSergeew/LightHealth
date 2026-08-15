@@ -61,11 +61,17 @@ public final class LightHealth extends JavaPlugin {
         if (this.displays != null) {
             this.displays.shutdown();
         }
+        if (this.prefs != null) {
+            this.prefs.shutdown();
+        }
     }
 
     public void reloadAll() {
         this.config = PluginConfig.load(this);
         this.messages.reload();
+        if (this.prefs != null) {
+            this.prefs.reload();
+        }
         if (this.displays != null) {
             this.displays.reloadFormat();
         }

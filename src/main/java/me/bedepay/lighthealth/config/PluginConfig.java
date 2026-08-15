@@ -291,8 +291,8 @@ public final class PluginConfig {
                 Math.max(0, c.getInt("damage-numbers.env-interval-ticks", 10)),
                 loadDamageTiers(plugin, c),
                 c.getBoolean("damage-numbers.crit.enabled", true),
-                c.getString("damage-numbers.crit.symbol", "✦"),
-                c.getString("damage-numbers.crit.format",
+                str(c, "damage-numbers.crit.symbol", "✦"),
+                str(c, "damage-numbers.crit.format",
                         "<gradient:#FFE082:#FF6D00><bold><symbol> <amount></bold></gradient>"),
                 Math.max(1, c.getInt("actionbar.duration-ticks", 40)),
                 Math.max(1, c.getInt("bossbar.hide-after-ticks", 70)),
@@ -585,10 +585,6 @@ public final class PluginConfig {
         return critSymbol;
     }
 
-    public boolean critEnabled() {
-        return critEnabled;
-    }
-
     public int actionbarDurationTicks() {
         return actionbarDurationTicks;
     }
@@ -601,20 +597,12 @@ public final class PluginConfig {
         return bossbarMinMaxHealth;
     }
 
-    public BossBar.Color bossbarColor() {
-        return bossbarColor;
-    }
-
     public BossBar.Overlay bossbarOverlay() {
         return bossbarOverlay;
     }
 
     public String formatHologram() {
         return formatHologram;
-    }
-
-    public String formatDamage() {
-        return formatDamage;
     }
 
     public String formatActionbar() {
@@ -688,5 +676,9 @@ public final class PluginConfig {
 
     public boolean anyChannelEnabled() {
         return hologram || damageNumbers || actionbar || bossbar;
+    }
+
+    public boolean anyFeedbackEnabled() {
+        return anyChannelEnabled() || (lookAt.enabled() && lookAt.anyChannel());
     }
 }

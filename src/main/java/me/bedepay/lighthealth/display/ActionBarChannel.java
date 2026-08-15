@@ -24,10 +24,6 @@ public final class ActionBarChannel {
         this.plugin = plugin;
     }
 
-    public void handle(final HealthSnapshot snap, final FormatService format) {
-        handle(snap, format, true);
-    }
-
     public void handle(final HealthSnapshot snap, final FormatService format, final boolean fromDamage) {
         final PluginConfig cfg = plugin.config();
         if (fromDamage && !cfg.actionbar()) {

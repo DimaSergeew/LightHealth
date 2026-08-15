@@ -30,24 +30,27 @@ public final class DamageListener implements Listener {
         if (!(event.getEntity() instanceof LivingEntity living)) {
             return;
         }
+
+        final double damage = event.getFinalDamage();
+        final Player viewer = DamageViewers.of(event);
+        showOnboarding(viewer, damage);
+
         if (!plugin.config().anyChannelEnabled()) {
             return;
         }
 
-        final double damage = event.getFinalDamage();
         final double max = FormatService.maxHealth(living);
         final double healthAfter = Math.max(0.0, living.getHealth() - damage);
         final boolean critical = Crits.isCritical(event);
-        final Player viewer = DamageViewers.of(event);
 
         plugin.displays().onDamage(living, healthAfter, max, damage, critical, viewer);
-        showOnboarding(viewer, damage);
     }
 
     private void showOnboarding(final Player viewer, final double damage) {
         if (viewer == null
                 || damage <= 0.0
                 || !plugin.config().onboarding().enabled()
+                || !plugin.config().anyFeedbackEnabled()
                 || !ViewAccess.canSee(plugin, viewer)
                 || !plugin.prefs().markOnboardingShown(viewer.getUniqueId())) {
             return;
